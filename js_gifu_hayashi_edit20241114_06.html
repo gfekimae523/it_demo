@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<!--
+制作者　　　：林優宏
+所属　　　　：岐阜駅前オフィスITエキスパートコース
+このファイル：ITEXプログラマーコース
+　　　　　　　JavaScript最終課題
+　　　　　　　簡易ピアノアプリ
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>簡易ピアノアプリ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+</head>
+
+<body>
+    <div id="header-container" class="container">
+        <header>
+            <h1>簡易ピアノアプリ</h1>
+        </header>
+        <p>
+            このページでは音声が流れます。ご注意ください。
+        </p>
+    </div>
+    <div id="message-container" class="container">
+        <p id="message-text"></p>
+    </div>
+    <div id="display-container" class="container">
+        <p id="display-text"></p>
+    </div>
+    <div id="keyboard-container" class="container">
+        <div>
+            <button type="button" class="key" value="C4">ド</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="D4">レ</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="E4">ミ</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="F4">ファ</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="G4">ソ</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="A4">ラ</button>
+        </div>
+        <div>
+            <button type="button" class="key" value="B4">シ</button>
+        </div>
+    </div>
+    <div id="autoplay-container" class="container">
+        <button type="button" id="autoplay-button">自動演奏</button>
+    </div>
+    <div id="create-score-container" class="container">
+        <h2>譜面を作成する</h2>
+        <div id="display-score-block">
+            <p id="score-text"></p>
+        </div>
+        <div id="choose-length-block">
+            <label>
+                <input type="radio" name="length" value="16">
+                16分音符
+            </label>
+            <label>
+                <input type="radio" name="length" value="8">
+                8分音符
+            </label>
+            <label>
+                <input type="radio" name="length" value="4" checked>
+                4分音符
+            </label>
+            <label>
+                <input type="radio" name="length" value="2">
+                2分音符
+            </label>
+            <label>
+                <input type="radio" name="length" value="1">
+                全音符
+            </label>
+        </div>
+        <div id="choose-key-block">
+            <label>
+                <input type="radio" name="key" value="C4" checked>
+                ド
+            </label>
+            <label>
+                <input type="radio" name="key" value="D4">
+                レ
+            </label>
+            <label>
+                <input type="radio" name="key" value="E4">
+                ミ
+            </label>
+            <label>
+                <input type="radio" name="key" value="F4">
+                ファ
+            </label>
+            <label>
+                <input type="radio" name="key" value="G4">
+                ソ
+            </label>
+            <label>
+                <input type="radio" name="key" value="A4">
+                ラ
+            </label>
+            <label>
+                <input type="radio" name="key" value="B4">
+                シ
+            </label>
+            <label>
+                <input type="radio" name="key" value="R">
+                休符
+            </label>
+        </div>
+        <div id="button-block">
+            <button type="button" id="append-note-to-draft-score-button">音符追加</button>
+            <button type="button" id="delete-last-note-from-draft-button">１つ削除</button>
+            <button type="button" id="reset-draft-score-button">全て削除</button>
+        </div>
+        <div id="title-block">
+            タイトル
+            <input type="text" id="title-textbox">
+        </div>
+        <div id="BPM-block">
+            BPM
+            <input type="number" id="BPM-textbox" min=1 value="120">
+        </div>
+        <button type="button" id="save-draft-score-button">譜面を新規作成</button>
+    </div>
+    <!--ここからCSS-->
+    <style>
+        body {
+            margin: 0 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        h2 {
+            margin: 0;
+
+            font-size: 18px;
+        }
+
+        .container {
+
+            width: 100%;
+            max-width: 500px;
+
+            margin: 10px auto;
+            padding: 10px;
+        }
+
+        #header-container {
+            padding: 0;
+        }
+
+        #message-container {
+            height: 20px;
+
+            background-color: #fff0d0;
+        }
+
+        #display-container {
+            height: 60px;
+
+            background-color: #ffe0e0;
+        }
+
+        #display-container p {
+            text-align: center;
+            line-height: 60px;
+
+            font-size: 24px;
+        }
+
+        #keyboard-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+
+            background-color: #fff0d0;
+        }
+
+        #keyboard-container .key {
+            height: 50px;
+            width: 50px;
+
+            padding: 0;
+
+            line-height: 50px;
+            text-align: center;
+
+            font-size: 18px;
+        }
+
+        #autoplay-container {
+            background-color: #fff0d0;
+        }
+
+        #autoplay-button {
+            display: block;
+
+            height: 50px;
+            width: 180px;
+
+            margin: 0 auto;
+        }
+
+        #create-score-container {
+            background-color: #c0ffc0;
+        }
+
+        #score-text {
+            min-height: 24px;
+
+            background-color: #ffffff;
+        }
+    </style>
+    <!--ここからJavaScript-->
+    <script>
+        /**
+         * 手動入力された音符の持続時間（ミリ秒）。
+         * @constant {number}
+         */
+        const MANUAL_NOTE_DURATION = 1000;
+
+        /**
+         * 再生時のデフォルトのBPM（1分あたりのビート数）。
+         * @constant {number}
+         */
+        const DEFAULT_BPM = 120;
+
+        /**
+         * 音符のデフォルトの長さ。
+         * @constant {number}
+         */
+        const DEFAULT_NOTE_LENGTH = 4;
+
+        /**
+         * 英語の音名を日本語の表示名に変換するマッピング。
+         * @constant {Object<string, string>}
+         */
+        const KEY_NAMES = {
+            'C': 'ド',
+            'D': 'レ',
+            'E': 'ミ',
+            'F': 'ファ',
+            'G': 'ソ',
+            'A': 'ラ',
+            'B': 'シ',
+            'R': '休',
+        };
+
+        window.addEventListener('load', function () {
+
+            /** @type {HTMLElement} */
+            const displayTextElm = document.getElementById('display-text');
+
+            /** @type {HTMLElement} */
+            const textMessageElm = document.getElementById('message-text');
+
+            /** @type {HTMLElement} */
+            const textScoreElm = document.getElementById('score-text');
+
+            /** @type {HTMLInputElement} */
+            const inputTitleElm = document.getElementById('title-textbox');
+
+            /** @type {HTMLInputElement} */
+            const inputBPMElm = document.getElementById('BPM-textbox');
+
+            /** @type {HTMLElement} */
+            const buttonAutoplayElm = document.getElementById('autoplay-button');
+
+            /**
+             * プリセットされた楽譜のリスト。
+             * @type {Array<Object>}
+             */
+            let scoreList = [
+                {
+                    'title': 'きらきら星',
+                    'notes': [
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'A4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'A4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 2000 },
+                        //----------------------------
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 2000 },
+                        //----------------------------
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 2000 },
+                        //----------------------------
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 2000 },
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'A4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'A4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'G4', 'duration': 2000 },
+                        //----------------------------
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'F4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'R', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 4000 },
+                        //----------------------------
+                    ],
+                },
+                {
+                    'title': 'チューリップの歌',
+                    'notes': [
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'G4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 500 },
+                        //----------------------------
+                        { 'key': 'D4', 'duration': 500 },
+                        { 'key': 'E4', 'duration': 500 },
+                        { 'key': 'C4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'G4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'G4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'E4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'G4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        //----------------------------
+                        { 'key': 'A4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'A4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'G4', 'duration': 1000 },
+                        //----------------------------
+                        { 'key': 'E4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'E4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'D4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        { 'key': 'D4', 'duration': 250 },
+                        { 'key': 'R', 'duration': 250 },
+                        //----------------------------
+                        { 'key': 'C4', 'duration': 4000 },
+                        //----------------------------
+                    ],
+                },
+            ];
+
+            /** 現在再生中の楽譜 */
+            let currentScore = null;
+
+            /** 編集中の新規楽譜 */
+            let draftScore = { 'title': '', 'notes': [] };
+
+            /** 楽譜内の現在再生中の音符のインデックス */
+            let currentNoteIndex = 0;
+
+            /** 表示テキストのクリア用タイムアウトID */
+            let displayClearTimeoutID = null;
+
+            /** 次の音符を再生するためのタイムアウトID */
+            let scorePlaybackTimeoutID = null;
+
+            // イベントリスナーの設定を呼び出し
+            addEventListeners();
+
+            /** Tone.js サンプラーの作成 */
+            const pianoSampler = new Tone.Sampler({
+                urls: {
+                    C4: "C4.mp3",
+                    "D#4": "Ds4.mp3",
+                    "F#4": "Fs4.mp3",
+                    A4: "A4.mp3"
+                },
+                baseUrl: "https://tonejs.github.io/audio/salamander/",
+                onload: () => {
+                    console.log("Piano loaded and ready to play.");
+                }
+            }).toDestination();
+
+            /**
+             * 指定された音名を再生する関数。
+             * @param {string} note - 再生する音名（例：'C4'）
+             * @param {number} duration - 音の持続時間（ミリ秒単位）
+             */
+            function playNoteSound(note, duration) {
+                // 音の長さを秒単位に変換して再生
+                pianoSampler.triggerAttackRelease(note, duration / 1000);
+            }
+
+            /**
+             * 指定されたテキストを表示エレメントに更新します。
+             * @param {string} text - 表示するテキスト
+             */
+            function displayText(text) {
+                displayTextElm.innerText = text;
+            }
+
+            /**
+             * 指定された音名の日本語表示名を表示エレメントに設定します。
+             * @param {string} key - 音名（英語表記）
+             */
+            function displayNoteName(key) {
+                displayText(KEY_NAMES[key.slice(0, 1)]);
+                playNoteSound(key, MANUAL_NOTE_DURATION); // 手動演奏の長さで再生
+            }
+
+            /**
+             * 表示エレメントを空にします（休符の表示）。
+             */
+            function displayRest() {
+                displayText('');
+            }
+
+            /**
+             * 指定された要素のテキストをクリアします。
+             * @param {HTMLElement} element - テキストをクリアする対象の要素
+             */
+            function clearElementText(element) {
+                element.innerText = '';
+            }
+
+            /**
+             * 表示エレメントの内容をクリアします。
+             */
+            function clearDisplay() {
+                clearElementText(displayTextElm);
+            }
+
+            /**
+             * メッセージエレメントの内容をクリアします。
+             */
+            function clearMessage() {
+                clearElementText(textMessageElm);
+            }
+
+            /**
+             * 現在の楽譜を再生する関数。
+             * 再帰的に呼び出され、楽譜が終了するまで繰り返します。
+             */
+            function performCurrentScore() {
+                if (currentNoteIndex == currentScore['notes'].length) {
+                    haltAutoplay();
+                    return;
+                }
+
+                let currentNote = currentScore['notes'][currentNoteIndex];
+
+                if (currentNote['key'] != 'R') {
+                    displayNoteName(currentNote['key']);
+                    playNoteSound(currentNote['key'], currentNote['duration']); // 自動演奏の長さで再生
+                } else {
+                    displayRest();
+                }
+
+                currentNoteIndex++;
+                scorePlaybackTimeoutID = setTimeout(performCurrentScore, currentNote['duration']);
+            }
+
+            /**
+             * 自動演奏を開始します。
+             */
+            function beginAutoplay() {
+                currentScore = selectScore();
+                textMessageElm.innerText = `自動演奏中です：${currentScore.title}`;
+                clearDisplay();
+                buttonAutoplayElm.innerText = '演奏中止';
+                disableKeyboard();
+                clearTimeout(displayClearTimeoutID);
+                currentNoteIndex = 0;
+                performCurrentScore();
+            }
+
+            /**
+             * ランダムに楽譜を選択します。
+             * @returns {Object} - 選択された楽譜
+             */
+            function selectScore() {
+                let scoreID = Math.floor(Math.random() * scoreList.length);
+                return scoreList[scoreID];
+            }
+
+            /**
+             * 自動演奏を停止します。
+             */
+            function haltAutoplay() {
+                currentScore = null;
+                clearMessage();
+                clearDisplay();
+                buttonAutoplayElm.innerText = '自動演奏';
+                enableKeyboard();
+            }
+
+            /**
+             * 鍵盤を無効化します。
+             */
+            function disableKeyboard() {
+                document.querySelectorAll('.key').forEach(key => key.disabled = true);
+            }
+
+            /**
+             * 鍵盤を有効化します。
+             */
+            function enableKeyboard() {
+                document.querySelectorAll('.key').forEach(key => key.disabled = false);
+            }
+
+            /**
+             * 現在のドラフト譜面を表示要素にフォーマットして追加します。
+             */
+            function displayDraftScore() {
+                let draftScoreString = '';
+                draftScore['notes'].forEach((note, i) => {
+                    if (i != 0) draftScoreString += ' ';
+                    draftScoreString += KEY_NAMES[note['key'].slice(0, 1)] + String(note['length']);
+                });
+                textScoreElm.innerText = draftScoreString;
+            }
+
+            /**
+             * UIで選択されたキーと長さから新しいドラフト譜面用の音符を作成します。
+             * @returns {Object} - 'key'と'length'プロパティを持つ音符オブジェクト
+             */
+            function createDraftNote() {
+                let selectedNoteLength = Number(document.querySelector('input[name=length]:checked').value);
+                let selectedNoteKey = document.querySelector('input[name=key]:checked').value;
+                return { 'key': selectedNoteKey, 'length': selectedNoteLength };
+            }
+
+            /**
+             * 新しい音符をドラフト譜面に追加し、表示を更新します。
+             */
+            function appendNoteToDraftScore() {
+                draftScore['notes'].push(createDraftNote());
+                displayDraftScore();
+            }
+
+            /**
+             * ドラフト譜面の最後の音符を削除し、表示を更新します。
+             */
+            function deleteLastNoteFromDraft() {
+                draftScore['notes'].pop();
+                displayDraftScore();
+            }
+
+            /**
+             * ドラフト譜面をリセットしてタイトルと音符をクリアし、表示を更新します。
+             */
+            function resetDraftScore() {
+                clearElementText(textScoreElm);
+                draftScore = { 'title': '', 'notes': [] };
+            }
+
+            /**
+             * 指定されたBPMに基づき、ドラフト譜面内の各音符の持続時間を計算して設定します。
+             * @param {number} BPM - BPM（1分あたりのビート数）
+             */
+            function calculateDraftNoteDurations(BPM) {
+                draftScore['notes'].forEach(note => {
+                    note['duration'] = (60 * 1000) / BPM * 4 / note['length'];
+                });
+            }
+
+            /**
+             * ドラフト譜面をスコアリストに保存し、各音符の持続時間を計算後、ドラフト譜面をリセットします。
+             */
+            function saveDraftScore() {
+                let title = inputTitleElm.value || '譜面' + (scoreList.length + 1);
+                let BPM = Number(inputBPMElm.value) || DEFAULT_BPM;
+
+                if (draftScore['notes'].length === 0) {
+                    alert('譜面に1つ以上音符を追加してください。');
+                    return;
+                }
+
+                if (BPM <= 0) {
+                    alert('BPMは正の数を入力してください。');
+                    return;
+                }
+
+                draftScore['title'] = title;
+                calculateDraftNoteDurations(BPM);
+                scoreList.push(draftScore);
+                resetDraftScore();
+                inputTitleElm.value = '';
+                inputBPMElm.value = DEFAULT_BPM;
+                alert('譜面を作成しました。');
+            }
+
+            /**
+             * イベントリスナーを追加します。
+             */
+            function addEventListeners() {
+                buttonAutoplayElm.addEventListener('click', toggleAutoplay);
+                document.getElementById('keyboard-container').addEventListener('click', handleKeyboardClick);
+                document.getElementById('append-note-to-draft-score-button').addEventListener('click', appendNoteToDraftScore);
+                document.getElementById('delete-last-note-from-draft-button').addEventListener('click', deleteLastNoteFromDraft);
+                document.getElementById('reset-draft-score-button').addEventListener('click', resetDraftScore);
+                document.getElementById('save-draft-score-button').addEventListener('click', saveDraftScore);
+            }
+
+            /**
+             * 自動演奏の開始・停止を切り替えます。
+             */
+            function toggleAutoplay() {
+                if (currentScore === null) {
+                    beginAutoplay();
+                } else {
+                    clearTimeout(scorePlaybackTimeoutID);
+                    haltAutoplay();
+                }
+            }
+
+            /**
+             * 鍵盤のクリックイベントを処理します。
+             * @param {Event} event - クリックイベント
+             */
+            function handleKeyboardClick(event) {
+                if (event.target.classList.contains('key')) {
+                    displayNoteName(event.target.value);
+                    clearTimeout(displayClearTimeoutID);
+                    displayClearTimeoutID = setTimeout(clearDisplay, MANUAL_NOTE_DURATION);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
