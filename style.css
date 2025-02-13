@@ -1,0 +1,333 @@
+@charset "UTF-8";
+
+* {
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+a, a:hover, a:visited {
+    color: inherit;
+}
+
+img {
+    vertical-align: middle;
+}
+
+p {
+    margin: 0;
+}
+
+body {
+    margin: 0;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    background-color: rgba(0,0,0,0.8);
+    margin: 0;
+}
+
+header h1 {
+    float: left;
+    color: #FFFFFF;
+    font-size: 26px;
+    line-height: 80px;
+    margin: 0 0 0 20px;
+}
+
+.span-lightblue {
+    color: #A6ACFF;
+}
+
+
+header ul {
+    float: right;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+}
+
+header li {
+    float: left;
+    list-style: none;
+}
+
+header a {
+    display: block;
+    line-height: 80px;
+    margin: 0 20px;
+    
+    font-size: 16px;
+}
+
+.clearfix::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.main-image {
+    background-image: url(images/main.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 40vh;
+}
+
+#intro-wrapper {
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.heading {
+    margin: 40px auto;
+}
+
+h2 {
+    color: #4B52A7;
+    font-size: 24px;
+    text-align: center;
+    margin: 0;
+}
+
+h2 .subtitle {
+    font-size: 14px;
+}
+
+.intro-statement {
+    max-width: 600px;
+    margin: 30px auto;
+    font-size: 16px;
+}
+
+.span-bold {
+    font-weight: bold;
+}
+
+.intro-image {
+    max-width: 600px;
+    margin: 30px auto 40px;
+}
+.intro-image img {
+    width: 100%;
+    max-width: 600px;
+}
+
+.intro-containers {
+    margin: 40px auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.intro-container {
+    width: 48%;
+    color: #FFFFFF;
+    background-color: #8AB3DC;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.intro-container h3 {
+    text-align: center;
+    margin: 20px 0px 20px;
+    font-size: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.intro-container h3 .subtitle {
+    font-size: 12px;
+}
+
+.intro-container ul {
+    margin: 20px 20px 20px;
+    font-size:16px;
+}
+
+.intro-container li {
+    line-height: 30px;
+}
+
+.list-color {
+    color: #FEFFC7
+}
+
+.link-color {
+    color: #FFE8F6;
+}
+
+#sample-wrapper {
+    margin: 80px 0px;
+}
+
+#sample-wrapper h3 {
+    margin: 80px 0px 40px;
+    color: #32839C;
+    text-align: center;
+    font-size: 16px;
+    border-bottom: 1px solid #B7B7B7;
+}
+
+.sample-images {
+    display:flex;
+}
+
+.sample-image {
+    width: 25%;
+}
+
+.sample-image img {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.sample-image h4 {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 4px;
+    padding-bottom: 6px;
+    text-align: center;
+    background-color: #758BAF;
+    color: #FFFFFF;
+    font-size: 14px;
+}
+
+.sample-image p {
+    width: 90%;
+    margin: 4px auto 0px;
+    font-size: 12px;
+}
+
+.form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-content {
+    display: flex;
+}
+
+.form-required {
+    background-color: #32839C;
+    color: #FFFFFF;
+    border-radius: 4px;
+    padding: 3px 8px 4px 8px;
+    font-size: 12px;
+}
+
+.form-label {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.textbox {
+    display: block;
+    margin: 10px auto 20px;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #B7B7B7;
+    border-radius: 10px;
+}
+
+.button {
+    display: block;
+    margin: 40px auto;
+    max-width: 300px;
+    width: 100%;
+    height: 40px;
+
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: #8AB3DC;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 4px #818694;
+}
+
+footer {
+    width: 100%;
+    height: 120px;
+    background-color: #8AB3DC;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.copyright {
+    padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+
+    header {
+        height: 48px;
+    }
+
+    header h1 {
+        font-size: 20px;
+        line-height: 48px;
+    }
+
+    header ul {
+        display: none;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h2 .subtitle {
+        font-size: 12px;
+    }
+
+    .main-image {
+        background-image: url(images/main_sp.jpg);
+        height: 100vh;
+    }
+
+    .intro-statement {
+        font-size: 14px;
+    }
+
+    .intro-containers {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .intro-container {
+        width: 100%;
+    }
+
+    .sample-images {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .sample-image {
+        width: 100%;
+    }
+
+    .sample-image img, .sample-image h4, .sample-image p {
+        width: 80%;
+    }
+
+    .form {
+        max-width: none;
+    }
+
+}

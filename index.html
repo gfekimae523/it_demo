@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Taro Shuro's Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        window.onload = function() {
+
+            const clickEvent = () => {
+                const persons = [
+                    {name:"田中", age:23},
+                    {name:"高橋", age:9},
+                    {name:"伊藤", age:16},
+                    {name:"鈴木", age:40}
+                ];
+                for (var i=0; i<persons.length; i++) {
+                    var message = persons[i].name + "さんの年齢は" + persons[i].age + "歳です。";
+                    if (persons[i].age < 20) {
+                        message += "20歳まで" + (20 - persons[i].age) + "年です。";
+                    } else {
+                        message += "20歳を超えています。"
+                    }
+                    console.log(message);
+                }
+
+                const numbers = [
+                    29342,
+                    45342,
+                    23419283,
+                    148458552
+                ];
+                var i=0;
+                while (i < numbers.length) {
+                    var message = numbers[i] + "は";
+                    if (numbers[i] % 2 == 0) {
+                        message += "偶数";
+                    } else {
+                        message += "奇数";
+                    }
+                    message += "です。7で割ったあまりは" + (numbers[i] % 7) + "です。";
+                    console.log(message);
+                    i++;
+                }
+            };
+            let button = document.getElementById("button");
+            button.addEventListener("click", clickEvent);
+        }
+    </script>
+</head>
+
+<body>
+    <header class="clearfix">
+        <h1>
+            <span class="span-lightblue">T</span>aro Shuro's Portfolio
+        </h1>
+        <ul class="clearfix">
+            <li><a href="#intro-wrapper">自己紹介</a></li>
+            <li><a href="#sample-wrapper">実装サンプル</a></li>
+        </ul>
+    </header>
+
+    <div class="main-image"></div>
+    <div id="intro-wrapper">
+        <div class="container">
+            <div class="heading">
+                <h2>
+                    自己紹介<br>
+                    <span class="subtitle">Self Introduction</span>
+                </h2>
+            </div>
+            <div class="intro-statement">
+                <p>
+                    私の名前は<span class="span-bold">就労太郎</span>です。アメリカ合衆国出身で現在はディーキャリアITエキスパートにて、プログラミング学習に取り組んでおります。<br>
+                    どうぞよろしくお願いいたします。
+                </p>
+            </div>
+            <div class="intro-image">
+                <img src="./images/img01.jpg" alt="湖と一本の木">
+            </div>
+            <div class="intro-containers">
+                <div class="intro-container">
+                    <h3>
+                        好きなもの・趣味<br>
+                        <span class="subtitle">Favorites</span>
+                    </h3>
+                    <ul class="list-color">
+                        <li>スポーツ観戦</li>
+                        <li>読書</li>
+                        <li>アウトドア</li>
+                    </ul>
+                </div>
+                <div class="intro-container">
+                    <h3>
+                        Webサイト<br>
+                        <span class="subtitle">Web Sites</span>
+                    </h3>
+                    <ul class="link-color">
+                        <li><a href="https://dd-career.com" target="_blank">ディーキャリア</a></li>
+                        <li><a href="https://www.google.com/" target="_blank">Google</a></li>
+                        <li><a href="https://www.yahoo.co.jp/" target="_blank">Yahoo! Japan</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sample-wrapper">
+        <div class="container">
+            <div class="heading">
+                <h2>
+                    実装サンプル<br>
+                    <span class="subtitle">Sample</span>
+                </h2>
+            </div>
+            <div class="image-gallery">
+                <h3 class="sample-h3">
+                    画像ギャラリー
+                </h3>
+                <div class="sample-images">
+                    <div class="sample-image">
+                        <img src="./images/gallery01.jpg" alt="宇宙飛行士と月">
+                        <h4>
+                            宇宙飛行士と月
+                        </h4>
+                        <p>
+                            幻想的な色彩の月と雲の前に、宇宙飛行士が立っています。
+                        </p>
+                    </div>
+                    <div class="sample-image">
+                        <img src="./images/gallery02.jpg" alt="朝日と石">
+                        <h4>
+                            朝日と石
+                        </h4>
+                        <p>
+                            積み重ねられた石を、朝日が照らしています。
+                        </p>
+                    </div>
+                    <div class="sample-image">
+                        <img src="./images/gallery03.jpg" alt="鏡のような湖">
+                        <h4>
+                            鏡のような湖
+                        </h4>
+                        <p>
+                            空と海がどちらかわからなくなるような、鏡のような湖です。
+                        </p>
+                    </div>
+                    <div class="sample-image">
+                        <img src="./images/gallery04.jpg" alt="ハートの風船">
+                        <h4>
+                            ハートの風船
+                        </h4>
+                        <p>
+                            青空をバックに、たくさんの色とりどりのハートの風船が浮いています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3 class="sample-h3">
+                    お問い合わせフォーム
+                </h3>
+                <div class="form">
+                    <div class="form-content">
+                        <p class="form-required">必須</p>
+                        <p class="form-label">名前</p>
+                    </div>
+                    <input class="textbox" type="text">
+                    <div class="form-content">
+                        <p class="form-required">必須</p>
+                        <p class="form-label">メールアドレス</p>
+                    </div>
+                    <input class="textbox" type="text">
+                    <div class="form-content">
+                        <p class="form-required">必須</p>
+                        <p class="form-label">年齢</p>
+                    </div>
+                    <input class="textbox" type="text">
+                    <div class="form-content">
+                        <p class="form-required">必須</p>
+                        <p class="form-label">お問い合わせ内容</p>
+                    </div>
+                    <input class="textbox" type="text">
+                    <input class="button" type="submit" value="送信">
+                </div>
+            </div>
+            <div class="javascript-assignment">
+                <h3 class="sample-h3">
+                    JavaScript課題
+                </h3>
+                <input id="button" class="button" type="submit" value="実行！">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copyright">
+            <small>Copyright &copy; 2022 Taro Shuro</small>
+        </div>
+    </footer>
+    
+</body>
+
+</html>
