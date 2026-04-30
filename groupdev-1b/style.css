@@ -1,0 +1,185 @@
+.hero {
+  position: relative;
+  padding-top:3.1em;
+}
+
+.hero img {
+  width:100%;
+  height: 80%;
+}
+
+.hero-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-shadow: 1px 1px 4px #000;
+  text-align: center;
+}
+
+.hero-text h2 {
+  font-size: 36px;
+}
+
+.hero-text p {
+  font-size: 18px;
+}
+
+.news {
+  padding: 40px 20px;
+  background: #fff;
+  text-align: center;
+}
+
+.news h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #800000;
+}
+
+.news .sub {
+  color: #a55;
+  margin-bottom: 20px;
+}
+
+.news ul {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
+  background: #e9fce3;
+  padding: 20px 0 20px 50px;
+  border: 1px dotted #bbb;
+  list-style: none;
+  font-family: "Shippori Mincho" , serif;
+}
+
+.news li {
+  margin-bottom: 10px;
+  color: #861212;
+  text-decoration: underline;
+}
+
+.news li span {
+  color: #861212;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.why-organic {
+  background: #fffde8;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.why-organic p, h2, h3, .menu-links p {
+  color: #861212;
+  font-family: "Shippori Mincho" , serif; 
+}
+
+.why-organic h2 {
+  color: #800000;
+  margin-bottom: 20px;
+}
+
+.why-organic .reason {
+  margin: 0 auto;
+  max-width: 90%;
+  background: #d4f5e0;
+  padding: 20px;
+  text-align: center;
+}
+
+.why-organic .center {
+  background: #F0FF9C;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 40px 20px;
+}
+
+.menu-links .box {
+  display: flex;
+  border: 1px solid #5a5;
+  max-width: 700px;
+  padding: 10px;
+  align-items: center;
+}
+
+.menu-links .box img {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  object-fit: cover;
+}
+
+h4.under-line a {
+  color: #861212;
+  font-family: "Shippori Mincho" , serif;
+}
+
+.access {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.access h2 {
+  font-size: 24px;
+  color: #800000;
+}
+
+.access .sub {
+  color: #a55;
+  margin-bottom: 20px;
+}
+
+.map-box {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.map-box .map img {
+  width: 300px;
+}
+
+.map-box .info {
+  text-align: left;
+  background: #eaffcc;
+  padding: 20px;
+  border: 1px solid #ccc;
+  height: 450px;
+}
+
+.info{
+  color: #861212;
+  font-family: "Shippori Mincho" , serif;
+}
+
+footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.contact-btn {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  background: #228B22;
+  color: white;
+  text-decoration: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  width: 400px;
+  font-family: "Shippori Mincho" , serif;
+}
+
+

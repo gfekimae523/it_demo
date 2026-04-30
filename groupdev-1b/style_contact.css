@@ -1,0 +1,85 @@
+/* フォーム全体 */
+#contact {
+  text-align: center;
+  padding: 136px 20px 20px 0px;
+  font-family: "Shippori Mincho" , serif;
+}
+
+/* 見出し */
+#contact h2 {
+  color: #861212; /* ダークレッド */
+  text-decoration: underline;
+}
+
+#contact p  {
+  color: #861212;
+  text-decoration: underline;
+}
+
+/* フィールドセット */
+#contact form fieldset {
+  border: 2px solid green;
+  border-radius: 5px;
+  padding: 30px;
+  max-width: 75%;
+  margin: 40px auto;
+  background-color: #fff;
+}
+
+/* 各入力エリア */
+#contact form div {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* ラベル */
+#contact form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #800000;
+}
+
+/* 入力欄・テキストエリア */
+input {
+  width: 30%;
+}
+
+#contact textarea {
+  width: 100%;
+}
+
+input, #contact textarea {
+  padding: 8px 12px;
+  border: 1px solid #800000;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+
+#contact textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* ボタン */
+#contact button {
+  background-color: #008000;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  font-family: "Shippori Mincho" , serif;
+}
+
+#contact button:hover {
+  background-color: #006400;
+}
+
+footer{
+  margin-top:auto;
+}
