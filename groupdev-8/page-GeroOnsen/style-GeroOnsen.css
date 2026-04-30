@@ -1,0 +1,490 @@
+:root {
+    --red: #c71212;
+    --blue: #1a095e;
+}
+
+@font-face {
+    font-family: "KanjyukuGothic"; /*任意のフォントファミリー名でOK*/
+    src: url("../font/KanjyukuGothic.otf") format("truetype"); /*fontがあるパスを書いて、formatを指定*/
+    font-display: swap; /*ダウンロード状況に応じてフォントの表示を変える
+(「swap」はWebフォントが読み込まれるまでフォールバックフォントで表示し、読み込まれた時点で置き換えます。)*/
+  }
+
+@font-face {
+    font-family: 'Boku2';
+    src: url(fonts/Boku2-Regular.woff) format("woff");
+}
+
+body {
+    margin: auto;
+    width: 1280px;
+    font-family: 'Boku2';
+    /* overflow-x: hidden; */
+}
+
+p {
+    margin: 0%;
+}
+
+.left{
+    text-align: left;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.center {
+    text-align: center;
+    margin: auto;
+}
+
+.f-left {
+    float: left;
+}
+
+.f-right {
+    float: right;
+}
+
+.size-ll {
+    font-size: 40pt;
+}
+
+.size-l {
+    font-size: 35pt;
+}
+
+.size-m {
+    font-size: 25pt;
+}
+
+.size-s {
+    font-size: 23pt;
+}
+
+.size-ss {
+    font-size: 20pt;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.white {
+    color: white;
+}
+
+.red {
+    color: var(--red);
+}
+
+.blue {
+    color: var(--blue);
+}
+
+.bg-red {
+    background-color: var(--red);
+}
+
+.bg-blue {
+    background-color: var(--blue);
+}
+
+.border-blue {
+    border-bottom: solid;
+    border-color: var(--blue);
+    border-width: 5px;
+
+    width: 100%;
+    height: 10px;
+
+    clear: both;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+}
+
+.column {
+    width: 50%;
+}
+
+/* <!-- 以下のコードをCSSファイルにコピペしてください。 --> */
+
+/* 画面最上部の“引き出しゾーン” */
+.header-trigger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    z-index: 1001;
+    background: transparent;
+}
+
+/* ヘッダー本体 */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0;
+    padding: 12px 40px;
+    background: #f2edc4;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
+}
+
+/* 上の細い領域にマウスを乗せたら表示 */
+.header-trigger:hover+header,
+header:hover {
+    transform: translateY(0);
+}
+
+.page-link {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: rgb(26, 145, 99);
+
+    font-family: "KanjyukuGothic";
+}
+
+
+.header {
+    height: 120px;
+
+    text-align: center;
+    align-content: center;
+}
+
+.mv {
+    position: relative;
+    z-index: 10;
+    /* background-image: url(images-GeroOnsen/test.png); */
+    background-size: cover;
+    width: 100%;
+    height: 900px;
+
+    text-align: center;
+}
+
+.mv-img {
+    object-fit: cover;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    object-position: 0% 0%;
+}
+
+.mv-img2 {
+    object-fit: cover;
+    z-index: 5;
+    position: absolute;
+    left: 0%;
+    width: 0%;
+    height: 100%;
+    object-position: 0% 0%;
+    transition-timing-function: ease;
+}
+
+.mv-img-hidden {
+    object-fit: cover;
+    z-index: 5;
+    position: absolute;
+    left: 100%;
+    width: 0%;
+    height: 100%;
+    object-position: 100% 100%;
+}
+
+.mv-img-hidden2 {
+    object-fit: cover;
+    z-index: 5;
+    position: absolute;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    object-position: 100% 100%;
+    transition-timing-function: ease;
+}
+
+.transition {
+    transition: 2.0s;
+}
+
+h1 {
+    z-index: 10;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 10%;
+    left: 50%;
+    font-size: 80pt;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    width: 100%;
+}
+
+h2 {
+    z-index: 10;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 60%;
+    left: 50%;
+    font-size: 65pt;
+    width: 100%;
+}
+
+
+h3 {
+    text-align: center;
+    font-size: 40pt;
+    height: 100px;
+    align-content: center;
+    font-weight: bold;
+}
+
+.buttons {
+    z-index: 10;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 90%;
+    left: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.mv-btn {
+    font-size: 100px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.introduction {
+    width: 100%;
+
+    text-align: center;
+}
+
+.about-title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100px;
+}
+
+.about-title2 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.about-1 {
+    padding: 3%;
+    margin: auto;
+}
+
+.about-title2::after,
+.about-title2::before {
+    background-color: var(--blue);
+    flex-grow: 1;
+    height: 5px;
+    content: "";
+}
+
+h4 {
+    height: 120px;
+    font-size: 50pt;
+    align-content: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    padding: 0%;
+}
+
+.about {
+    height: 450px;
+}
+
+.intro_border_red {
+    margin-top: 50px;
+    margin-left: 50px;
+    border: solid var(--red) 15px;
+    flex-grow: 1;
+}
+
+.batten {
+    font-size: 200px;
+    align-content: center;
+    flex-grow: 1;
+}
+
+.intro_border_blue {
+    margin-top: 50px;
+    margin-right: 50px;
+    border: solid var(--blue) 15px;
+    flex-grow: 1;
+}
+
+ul {
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+li {
+    text-align: left;
+}
+
+.chara_intro {
+    height: 800px;
+}
+
+.c_f_1 {
+    shape-outside: polygon(0% 0%,100% 0%, 100% 50%, 80% 50%, 80% 100%, 0% 100%);
+}
+
+.img-notice {
+    vertical-align: top;
+}
+
+.onsen-image-center {
+    width: 600px;
+}
+
+.answer{
+    position: relative;
+    top: 260px;
+    left: -770px;
+    font-size: 60pt;
+    font-weight: bold;
+    color:rgb(110, 95, 160);
+}
+
+.onsen-images {
+    position: relative;
+    height: 900px;
+}
+
+.fukidashi {
+    position: absolute;
+    top: 0px;
+    left: 450px;
+    height: 380px;
+}
+
+.fukidashi-txt {
+    position: absolute;
+    top: 30px;
+    left: 530px;
+    width: 500px;
+}
+
+.onsen-img-1{
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    height: 300px;
+}
+
+.onsen-img-2{
+    position: absolute;
+    top: 300px;
+    left: 0px;
+    height: 250px;
+}
+
+.onsen-img-3{
+    position: absolute;
+    top: 550px;
+    left: 0px;
+    height: 350px;
+}
+
+.onsen-img-4{
+    position: absolute;
+    top: 300px;
+    left: 300px;
+    height: 600px;
+}
+
+.onsen-img-5{
+    position: absolute;
+    top: 310px;
+    left: 900px;
+    height: 250px;
+}
+
+.onsen-img-6{
+    position: absolute;
+    top: 560px;
+    left: 910px;
+    height: 300px;
+}
+
+.spots {
+    margin-top: 100px;
+}
+
+.border-dot {
+    border-right: dotted;
+    border-width: 5px;
+}
+
+.spots-title {
+    height: 100px;
+    font-size: 40pt;
+    text-align: center;
+    line-height: 100px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.spots-container {
+    height: 630px;
+}
+
+.spots-img {
+    width: 49%;
+    height: 49%;
+    vertical-align: middle;
+}
+
+.spots-img-r {
+    margin-left: 2%;
+}
+
+.spots-img-b {
+    margin-top: 2%;
+}
+
+.spots-p {
+    align-content: center;
+    height: 100%;
+    padding: 5%;
+}
+
+.c_f_24 {
+    shape-outside: polygon(0% 0%, 80% 0%, 80% 70%, 100% 70%, 100% 100%, 0% 100%);
+}
+
+iframe {
+    height: 670px;
+    width: 100%;
+}
+
+.c_m_5 {
+    position: relative;
+    top: -35px;
+}

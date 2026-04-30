@@ -1,0 +1,497 @@
+@font-face {
+    font-family: "KanjyukuGothic"; /*任意のフォントファミリー名でOK*/
+    src: url("../font/KanjyukuGothic.otf") format("truetype"); /*fontがあるパスを書いて、formatを指定*/
+    font-display: swap; /*ダウンロード状況に応じてフォントの表示を変える
+(「swap」はWebフォントが読み込まれるまでフォールバックフォントで表示し、読み込まれた時点で置き換えます。)*/
+  }
+
+/* 各個人のwebサイトのスタイルを書き込んでいただけますと幸いです。 */
+*{
+    padding:0px;
+    margin:0px;
+}
+@font-face {
+    font-family: "Chalk-JP";
+    src: url("fonts/Chalk-JP.otf") format("truetype");
+}
+@font-face {
+    font-family: "TanukiMagic";
+    src: url("fonts/TanukiMagic.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Yomogi-Regular";
+    src: url("fonts/Yomogi-Regular.ttf") format("truetype");
+}
+main{
+    width:100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+    /* 画面最上部の“引き出しゾーン” */
+.header-trigger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    z-index: 1001;
+    background: transparent;
+}
+
+/* ヘッダー本体 */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0;
+    padding: 12px 40px;
+    background: #f2edc4;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
+}
+
+/* 上の細い領域にマウスを乗せたら表示 */
+.header-trigger:hover + header,
+header:hover {
+    transform: translateY(0);
+}
+
+.page-link {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: rgb(26, 145, 99);
+
+    font-family: "KanjyukuGothic";
+}
+
+/*メインビジュアル--------------------------------------------*/
+.main-visual{
+    position:relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    /* 3Dの奥行きを設定（数値が小さいほど迫力が出る） */
+    perspective: 1000px;
+}
+.board-wrapper{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left:50%;
+    /*要素の外にはみ出した部分を隠す*/
+    transform: translate(-50%, -50%) translateY(-150%) rotate(-50deg);
+    /* 子要素（画像）の3D配置を有効にする */
+    transform-style: preserve-3d;
+}
+
+.board-img{
+    width: 100%;
+    height: 100%; 
+    display: block;
+}
+
+.catchcopy-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 35%;
+    height: 18%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.catchcopy-box h1{
+    color:white;
+    font-family: "Chalk-JP", cursive;
+    /*最小 24px,通常は 4vw,最大 56px*/
+    font-size: clamp(24px, 4vw, 56px);
+    transform: rotate(-10deg);
+    
+}
+.blackboard-copy span {
+    display: inline-block; /* ★超重要：これがないと y の動きが効きません */
+    opacity: 0;           /* 最初は消しておく */
+}
+.Line-2{
+    padding-left: 1em;
+}
+.red-chalk{
+    color:#ff8888;
+    font-size: 1.3em;
+}
+.board-anime-area{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.board-anime-img{
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+    width: 11%;
+    height: auto;
+}
+
+.board-comment{
+    position: absolute;
+    font-family: "Chalk-JP", cursive;
+    font-size: clamp(24px, 4vw, 56px);
+    color:#a9d159;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
+    width: 100%;  /* 黒板全体をカバーするように広げる */
+    height: 100%;
+    /*opacity: 0;*/
+}
+.board-comment>span {
+    position: absolute;
+    display: inline-block;
+}
+.comment-LU{
+    top:10%;
+    left:5%;
+    rotate: -10deg;
+}
+.comment-RU{
+    top:10%;
+    left:85%;
+    rotate: 10deg;
+}
+.comment-LD{
+    top:80%;
+    left:5%;
+    rotate: 10deg;
+}
+.comment-RD{
+    top:80%;
+    left:82%;
+    rotate: -10deg;
+}
+.comment-A{
+    position: static; /* ★絶対配置を解除（普通の文字として扱う） */
+    display: inline;  /* ★横に並べる */
+    
+    /* ここから下は「A」だけへの編集（例） */
+    color: #ff8888;   /* ★色を黄色（金色のチョーク）に変える */
+    font-size: 1.5em; /* ★少し大きくする */
+    font-weight: bold;
+}
+/*アニメ紹介セクション*/
+.scroll-wrapper {
+    height: 400vh; /* 4ページ分なら、画面4枚分のスクロール距離を確保 */
+}
+
+.sticky-container {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.notebook-wrapper {
+    position: relative;
+    /* 全画面で見せたいサイズを指定（例：1600px） */
+    width: 1600px; 
+    height: 900px;
+
+    /* 右側には余白を作らず、右端に寄せる */
+    margin-left: auto;
+    margin-right: 0;
+
+
+    /* 横スクロールが発生してもレイアウトが壊れないようにする */
+    box-sizing: border-box;
+}
+
+/* 2. 「めくる対象」である .page をすべて重ねる */
+.page {
+    position: absolute;     /* ★重要：これで全ページが同じ場所に重なる */
+    inset: 0;               /* 四隅を親に合わせる */
+}
+
+.page-container {
+    /* wrapper の右側にノート本体を配置（付箋の幅分、左を開ける） */
+    position: absolute;
+    right: 0;
+    width: 1400px; /* ノート画像自体の横幅（固定値） */
+    height: 100%;
+    background: url('images/GifuAnime-note.png') no-repeat center center / 100% 100%;
+}
+/*開いているページを分かりやすくするための付箋*/
+
+/* 重なり順：p1が一番上 */
+.p1 { z-index: 4; }
+.p2 { z-index: 3; }
+.p3 { z-index: 2; }
+.p4 { z-index: 1; }
+/*アニメ紹介セクションの内容------------------------------------------------------*/
+/* 例：左上のポスター画像 */
+/* 付箋を囲む共通の親 */
+.page-tag {
+    position: absolute;
+    left: -70px; /* ノートの左側に少し飛び出させる（位置は調整してください） */
+    width: 100%; /* 付箋のサイズ */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+/* 付箋画像自体の設定 */
+.img-tag {
+    width: 100px;
+    height: auto;
+}
+
+/* 各ページの付箋を縦に並べる（4等分して配置） */
+/* 1ページ目（p1）の付箋 */
+.page:nth-child(1) .page-tag {
+    top: 10%;
+}
+
+/* 2ページ目（p2）の付箋 */
+.page:nth-child(2) .page-tag {
+    top: 30%; /* 間隔をあけて配置 */
+}
+.tag-title{
+    font-family: "TanukiMagic";
+}
+.p2 .tag-title{
+    font-size:20px;
+    left:10px;
+}
+/* 3ページ目（p3）の付箋 */
+.page:nth-child(3) .page-tag {
+    top: 50%;
+}
+.p3 .tag-title{
+    font-size:18px;
+    left:18px;
+}
+/* 4ページ目（p4）の付箋 */
+.page:nth-child(4) .page-tag {
+    top: 70%;
+}
+.page-tag h4 {
+    position: absolute;       /* 画像の上に重ねる */
+    margin: 0;
+    padding: 0;
+    writing-mode: vertical-rl; /* 縦書き（右から左へ） */
+    text-orientation: mixed;   /* 英数字が混ざっても自然な向きに */
+    font-size: clamp(1rem, 1vw + 0.5rem, 2vw);         /* ふせんの幅に合わせて調整 */
+    color: #333;               /* 文字色 */
+    white-space: nowrap;       /* 改行を防ぐ */
+    left: 2%
+}
+
+.img-anime-intro {
+    position: absolute;
+    top: 120px;    /* 上から10%の位置 */
+    left: 150px;   /* 左から20%の位置 */
+    width: 350px;  /* ノートの幅に対するサイズ */
+    transform: rotate(-5deg); /* 少し傾けるのがポイント！ */
+    z-index: 2;
+}
+.p1 .img-anime-intro{
+    width: 320px;
+}
+.p2 .img-anime-intro {
+    transform: rotate(8deg);
+    width: 300px;
+}
+.p3 .img-anime-intro {
+    transform: rotate(4deg);
+    width: 320px;
+}
+.p4 .img-anime-intro {
+    transform: rotate(-2deg);
+    width: 320px;
+}
+.img-icon{
+    position: absolute;
+    top: 150px;    /* 上から10%の位置 */
+    right: 150px;
+    width: 180px;
+}
+
+.img-maskingtape{
+    position: absolute;
+    top: 100px;    /* 上から10%の位置 */
+    left: 650px;   /* 左から20%の位置 */
+    transform: rotate(5deg); /* 少し傾けるのがポイント！ */
+    z-index: 2;
+    width:400px;
+}
+.p2 .img-maskingtape{
+    transform: rotate(-4deg); 
+}
+.p3 .img-maskingtape{
+    transform: rotate(3deg); 
+}
+.p4 .img-maskingtape{
+    transform: rotate(-1deg); 
+}
+
+.page .anime-title{
+    position: absolute;
+    z-index: 3;
+    top: 130px;    
+    left: 740px;
+    font-size: clamp(20px, 4vw, 56px);
+    font-size: 48px;
+    font-family: "TanukiMagic";
+}
+.p2 .anime-title{
+    font-size: 36px;
+    top:160px;
+    left:690px;
+}
+.p3 .anime-title{
+    text-align: center;
+    font-size: 36px;
+    top:130px;
+    left:700px;
+}
+.p4 .anime-title{
+    top:150px;
+    left:770px;
+}
+.anime-title rt{
+    font-size: 16px;
+}
+.genru-title{
+    position: absolute;
+    z-index: 2;
+    top: 250px;    
+    left: 670px;
+    font-size: 24px;
+    font-family: "TanukiMagic";
+    display: inline-block; /* 文字の長さ分だけ線を引く */
+    /* 下の 40% に半透明の黄色（マーカー色）を塗る */
+    background: linear-gradient(transparent 60%, rgba(255, 255, 0, 0.5) 60%);
+    
+    /* 文字とマーカーの隙間調整（重要） */
+    padding-bottom: 2px;
+}
+.genru-content{
+    position: absolute;
+    z-index: 2;
+    top: 280px;    
+    left: 770px;
+    font-size: 24px;
+    font-family: Yomogi-Regular;
+}
+.synopsis-title{
+    position: absolute;
+    z-index: 2;
+    top: 320px;    
+    left: 670px;
+    font-size: 24px;
+    font-family: "TanukiMagic";
+    display: inline-block; /* 文字の長さ分だけ線を引く */
+    /* 下の 40% に半透明の黄色（マーカー色）を塗る */
+    background: linear-gradient(transparent 60%, rgba(255, 255, 0, 0.5) 60%);
+    
+    /* 文字とマーカーの隙間調整（重要） */
+    padding-bottom: 2px;
+}
+/*アニメのあらすじ*/
+.synopsis-content{
+    position: absolute;
+    z-index: 2;
+    width:450px;
+    top: 350px;    
+    left: 700px;
+    font-size: 20px;
+    font-family: Yomogi-Regular;
+}
+.place-name{
+    position: absolute;
+    top: 600px;    
+    left: 150px;
+    font-size: 24px;
+    font-family: "TanukiMagic";
+    display: inline-block; /* 文字の長さ分だけ線を引く */
+    /* 下の 40% に半透明の黄色（マーカー色）を塗る */
+    background: linear-gradient(transparent 60%, rgba(255, 255, 0, 0.5) 60%);
+    
+    /* 文字とマーカーの隙間調整（重要） */
+    padding-bottom: 2px;
+}
+.descipt-place{
+    position: absolute;
+    z-index: 2;
+    width:300px;
+    top: 650px;    
+    left: 150px;
+    font-size: 20px;
+    font-family: Yomogi-Regular;
+}
+.map-wrapper{
+    position: absolute;
+    top: 540px;    
+    left: 1000px;
+    width:250px;
+    height: 230px;
+}
+.p1 .map-wrapper{
+    transform: rotate(-2deg); 
+}
+.p2 .map-wrapper{
+    transform: rotate(1deg); 
+}
+.p3 .map-wrapper{
+    transform: rotate(3deg); 
+}
+.p4 .map-wrapper{
+    transform: rotate(-2deg); 
+}
+.map-wrapper iframe{
+    width: 100%;
+    height: 100%;
+}
+/*聖地の場所*/
+.img-anime-place{
+    position: absolute;
+    z-index: 2;
+    top: 520px;    
+    left: 550px;
+    width:400px;
+    transform: rotate(4deg); 
+}
+.p1 .img-anime-place{
+    top: 540px; 
+}
+.p2 .img-anime-place{
+    transform: rotate(-2deg); 
+}
+.p3 .img-anime-place{
+    transform: rotate(-6deg); 
+}
+.p4 .img-anime-place{
+    transform: rotate(4deg); 
+    top: 530px;  
+}
+/*------------------------------------------------------*/

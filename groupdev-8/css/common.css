@@ -1,0 +1,58 @@
+@font-face {
+    font-family: "KanjyukuGothic"; /*任意のフォントファミリー名でOK*/
+    src: url("../font/KanjyukuGothic.otf") format("truetype"); /*fontがあるパスを書いて、formatを指定*/
+    font-display: swap; /*ダウンロード状況に応じてフォントの表示を変える
+(「swap」はWebフォントが読み込まれるまでフォールバックフォントで表示し、読み込まれた時点で置き換えます。)*/
+  }
+
+/* ページ共通の幅設定です。数値の変更時にはグループメンバーに相談していただきたいです。 */
+:root {
+  --page-max-width: 1200px; /* ページの最大サイズ */
+  --page-min-width: 320px; /* ページの最小サイズ */
+  --page-padding: 0 1.5rem; /* 上下、左右の余白 */
+}
+
+.page-wrapper {
+  max-width: var(--page-max-width); /* 要素の最大幅 */
+  min-width: var(--page-min-width); /* 要素の最小幅 */
+  width: 100%; /* ページの横幅 */
+  margin: 0 auto; /* 要素を中央揃えにする */
+  padding: var(--page-padding); /* 要素の内側の余白。 */
+  box-sizing: border-box; /* paddingやborderを含めてwidthを計算する設定。 */
+}
+
+
+
+/* 
+以下、解説です。
+
+
+**`:root` ブロック**
+
+| プロパティ | 意味 |
+|---|---|
+| `--page-max-width: 1200px` | CSS変数の定義。`--` で始まる名前は自分で決められる変数です |
+| `--page-min-width: 320px` | 同上。320pxはスマホの最小幅を想定しています |
+| `--page-padding: 0 1.5rem` | 同上。上下0・左右1.5remという余白の値を変数にしています |
+
+**`.page-wrapper` ブロック**
+
+| プロパティ | 意味 |
+|---|---|
+| `max-width: var(--page-max-width)` | 要素の最大幅。`var()` で上で定義した変数を呼び出しています |
+| `min-width: var(--page-min-width)` | 要素の最小幅。これより小さくはならない |
+| `width: 100%` | 親要素の幅いっぱいに広がる。max-widthを超えない範囲で |
+| `margin: 0 auto` | 上下の余白は0、左右は自動。これでページを中央寄せにできます |
+| `padding: var(--page-padding)` | 要素の内側の余白。上下0・左右1.5rem |
+| `box-sizing: border-box` | paddingやborderを含めてwidthを計算する設定。これがないとpaddingを足した分だけ幅が広がってしまいます |
+
+`box-sizing: border-box` は少し分かりにくいので図で補足します。
+
+/* border-box なし（デフォルト） *//*
+width: 100px + padding: 20px = 実際の幅 120px  ← はみ出す
+*/
+
+/* border-box あり *//*
+width: 100px の中に padding: 20px が収まる = 実際の幅 100px  ← 崩れない
+
+*/

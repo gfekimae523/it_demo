@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="../css/common.css"> <!-- ページの幅を統一するためのCSSファイルです。 -->
+  <link rel="stylesheet"
+    href="style-RandomDiary.css"> <!-- こちらのCSSファイルに個人ページのスタイルを書いていただけますと幸いです。 -->
+  <title>トップページ</title>
+</head>
+<body>
+  <div class="background-cover">
+  <div class="page-wrapper">
+    <!-- ここにコンテンツを書き込んでください。 -->
+     
+<div class="header-trigger"></div>
+<header>
+  <a class="page-link" href="../top.html">トップ</a>
+  <a class="page-link" href="">らんだむ<br>”にっき”</a>
+  <a class="page-link" href="../page-GifuAnime/page-GifuAnime.html">岐阜アニメ特集</a>
+  <a class="page-link" href="../page-Nobunaga/page-Nobunaga.html">織田信長<br>ゆかりの地</a>
+  <a class="page-link" href="../page-GeroOnsen/page-GeroOnsen.html">下呂温泉の<br>魅力</a>
+  <a class="page-link" href="../page-Hyway/page-Hyway.html">東海環状<br>自動車道</a>
+  <a class="page-link" href="../page-GifuPhoto/page-GifuPhoto.html">色でめぐる<br>岐阜</a>
+</header>
+
+      <section>
+        <p class="diariy-tittle">らんだむ”にっき”</p>
+        <p class="diariy-detail">誰かの日常を覗いてみましょう……</p>
+        <button class="diariy-door" onclick="openModal()"><img class="diariy-door" src="images-RandomDiary/door_half_open.png"></button>
+        <p class="diariy-detail">クリック！</p>
+      </section>
+
+      <button class="keyword" onclick="openModalKeyword()">
+        <img id="keyword-image" src="images-RandomDiary/book_open_yoko.png" alt="キーワードは「N」だよ">
+      </button>
+
+      <div id="overlay">
+        <div id="modal">
+       <img  id="mImg"  src="" alt="">   <!-- src は空でOK -->
+       <p    id="mName"></p>            <!-- 中身は空でOK -->
+       <p    id="mDesc"></p>
+          <button onclick="closeModal()"><img src=""></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script-RandomDiary.js"></script>
+</body>
+</html>

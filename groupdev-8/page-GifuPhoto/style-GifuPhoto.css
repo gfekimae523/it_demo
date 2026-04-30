@@ -1,0 +1,414 @@
+:root {
+  --color-blue: #1f48ff;
+  --color-light-blue: #3ddbe1;
+  --color-green: #7ed957;
+  --color-yellow: #ffd21f;
+  --color-orange: #ff751f;
+  --color-red: #ff3a3a;
+}
+
+* {
+  box-sizing: border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body {
+  min-height: 100vh;
+}
+
+body {
+  transition: background-color 0.6s ease;
+  font-family: 'Shippori Mincho', serif;
+}
+
+body.theme-initial {
+  background: linear-gradient(
+      #7ed95780,
+      #003e7e80
+    ),
+    url('images-GifuPhoto/白川郷.png'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+    /* 画面最上部の“引き出しゾーン” */
+.header-trigger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    z-index: 1001;
+    background: transparent;
+}
+
+/* ヘッダー本体 */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0;
+    padding: 12px 40px;
+    background: #f2edc4;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
+}
+
+/* 上の細い領域にマウスを乗せたら表示 */
+.header-trigger:hover + header,
+header:hover {
+    transform: translateY(0);
+}
+
+.page-link {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: rgb(26, 145, 99);
+
+    font-family: "KanjyukuGothic";
+}
+
+
+body.theme-blue      { background-color: var(--color-blue); }
+body.theme-lightBlue { background-color: var(--color-light-blue); }
+body.theme-green     { background-color: var(--color-green); }
+body.theme-yellow    { background-color: var(--color-yellow); }
+body.theme-orange    { background-color: var(--color-orange); }
+body.theme-red       { background-color: var(--color-red); }
+body.theme-outline   { background-color: #ffffff; }
+
+.content-area {
+  width: 100%;
+  height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* flex-start → center に変更（縦方向も中央に） */
+  justify-content: center;
+  padding-bottom: 90px; 
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
+}
+
+/* タイトル・テキスト系のみ縦書き */
+.content-title,
+.content-text,
+.map-item__title,
+.map-item__text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.content-title,
+.content-text {
+  color: #ffffff;
+  padding-top: 7vh;
+}
+
+.content-title {
+  font-size: 38px;
+  margin-left: 20px;
+  font-weight: normal;
+}
+
+.content-title rt {
+  font-size: 15px;
+}
+
+.content-text {
+  font-size: 21.5px;
+  writing-mode: vertical-rl;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  white-space: pre-line; 
+  margin-left: 50px;
+}
+
+.content-title--initial,
+.content-text--initial {
+  overflow: visible; /* hiddenからvisibleに変更 */
+  max-height: none;  /* 100%の制限を解除 */
+  margin-left: 50px;
+  line-height: 4;
+  margin-top: 5vh;
+}
+
+.content-title--initial{
+  font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+body.theme-outline .content-title,
+body.theme-outline .content-text {
+  display: none;/*白のボタンを押した時、コンテンツを非表示にする*/
+}
+
+
+.map-area {
+  display: none;
+  width: 100%;
+  margin: 0 auto;
+  height: calc(100vh - 180px);
+  box-sizing: border-box;
+  padding: 0 16px 24px; 
+  margin-top: 12vh;
+}
+
+
+.map-contents {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap:16px;
+  padding-bottom: 15px;
+  width: 100%;
+  height: 100%;
+  margin-top: -10px;
+}
+
+.map-col {
+  display: flex;
+  align-self: stretch; 
+  flex-direction: column;/*縦に並べる*/
+  justify-content: space-between; 
+  flex: 1; /* 余白を均等に分け合って伸縮 */
+  min-width: 0; /* flexで縮めるために必要 */
+  gap: 24px;
+}
+
+.map-group {
+  display: flex;
+  flex-direction: row; /* rowに変更 */
+  flex-wrap: nowrap;
+  justify-content: flex-end; /* 右寄せ */
+  align-items: center;
+  width: 100%;
+  /* aspect-ratio: 310 / 150; */
+  padding: 8px;
+  overflow: hidden;
+  flex: 1;
+  height: auto;
+}
+
+.map-group--blue {
+  border: 2px solid var(--color-blue);
+}
+
+.map-group--lightBlue {
+  border: 2px solid var(--color-light-blue);
+}
+
+.map-group--green {
+  border: 2px solid var(--color-green);
+}
+
+.map-group--yellow {
+  border: 2px solid var(--color-yellow);
+}
+
+.map-group--orange {
+  border: 2px solid var(--color-orange);
+}
+
+.map-group--red {
+  border: 2px solid var(--color-red);
+}
+
+
+.map-item {
+  display: flex;
+  flex-direction: row-reverse; 
+  gap: 4px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-height: 100%;
+  align-items: center;
+  color: #754620;
+}
+
+.map-item__title {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.map-item__text {
+  font-size: 11px;
+}
+
+.map-item__title,
+.map-item__text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.map-iframe-wrapper{
+  flex: 2; /* map-colの2倍の幅を基準に */
+  min-width: 0;
+  aspect-ratio: unset;
+  height: 100%;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.slide-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center; /* flex-end → center に変更 */
+  width: 100%;
+  height: 100%;
+  margin-top:80px;
+}
+
+.slide-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  transition: opacity 0.3s ease;
+  align-self: center;
+  margin: 0 -10px;
+}
+
+.slide-btn svg {
+  width: clamp(40px, 8vw, 60px); /* 元のfont-sizeと同じ値 */
+  height: clamp(40px, 8vw, 60px);
+  stroke: currentColor;
+  stroke-width: 1; /* ← この値で太さを調整（1〜4くらいが目安）*/
+}
+
+.slide-btn:hover {
+  opacity: 0.6;
+}
+
+
+.slide-text-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  flex: 0 0 320px; /* autoから固定幅に変更 */
+  width: 320px;
+  overflow: hidden;
+  padding: 20px;
+  margin-left: 30px;
+}
+
+.slide-image-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* 矢印を縦中央に */
+  min-width: 0; 
+}
+
+.slide-image {
+  transition: opacity 0.3s ease;
+  object-fit: cover;
+  width: auto;
+  aspect-ratio: 3 / 2; 
+  height: 100%;
+  max-height: 500px;
+}
+
+.tabs-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabs-label-container {
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  height: 100%;
+  margin-right: 16px;
+}
+
+body:not(.theme-initial) .tabs-label-container {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.tabs-label {
+  writing-mode: vertical-rl; /* 縦書き */
+  color: white;
+}
+
+.triangle-wrapper {
+  filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
+}
+
+.triangle {
+  width: 30px;
+  height: 30px;
+  background: white;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.section-tabs {
+  display: flex;
+  gap: clamp(10px, 3vw, 42px);
+  justify-content: center; /* ボタンは横中央のまま */
+  writing-mode: horizontal-tb;
+  align-items: center;
+}
+
+.tab-btn {
+  border-radius: 50%;
+  width: clamp(30px,8vw,65px);
+  height: clamp(30px,8vw,65px);
+  aspect-ratio: 1;/*正円を保つ*/
+  border: none;
+}
+
+.tab-btn--blue {
+  background-color: var(--color-blue);
+}
+
+.tab-btn--lightBlue {
+  background-color: var(--color-light-blue);
+}
+
+.tab-btn--green {
+  background-color: var(--color-green);
+}
+
+.tab-btn--yellow {
+  background-color: var(--color-yellow);
+}
+
+.tab-btn--orange {
+  background-color: var(--color-orange);
+}
+
+.tab-btn--red {
+  background-color: var(--color-red);
+}
+
+.tab-btn--outline {
+  background-color: transparent;
+  border: 4px solid white;
+}

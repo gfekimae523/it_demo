@@ -1,0 +1,468 @@
+/* 各個人のwebサイトのスタイルを書き込んでいただけますと幸いです。 */
+@font-face {
+    font-family: "KanjyukuGothic"; /*任意のフォントファミリー名でOK*/
+    src: url("font/KanjyukuGothic.otf") format("truetype"); /*fontがあるパスを書いて、formatを指定*/
+    font-display: swap; /*ダウンロード状況に応じてフォントの表示を変える
+(「swap」はWebフォントが読み込まれるまでフォールバックフォントで表示し、読み込まれた時点で置き換えます。)*/
+  }
+
+body {
+    background-color: #f2edc4;
+}
+
+
+
+header {
+    display: flex;
+    flex-direction :row;
+    justify-content: space-around;
+    margin: 40px;
+}
+
+.page-link {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+    color:rgb(26, 145, 99);
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.fes-title-box {
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.fes-title-sirakawago {
+    width: 150px;
+    height: auto;
+
+    position: relative;
+    transform: translate(90px, 30px); /* X, Yの順 */
+}
+
+.fes-title {
+    width: 700px;
+    height: auto;
+
+    margin-bottom: 50px;
+
+}
+
+.fes-title-sarubobo {
+    width: 100px;
+    height: auto;
+
+    position: relative;
+    transform: translate(-80px, 30px) rotate(30deg); /* X, Yの順 */
+    
+}
+
+
+video {
+    width: 700px;
+    height: auto;
+}
+
+.gifu {
+    width: auto;
+    height: auto;
+    margin-top: 50px;
+}
+
+.gifu-sub {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 30px;
+    text-align: center;
+    
+    color:rgb(110, 89, 18); 
+}
+
+.gifu-detail {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 15px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+}
+
+
+.keyword {
+    width: 500px;
+    height: 600px;
+    background-image: url(images-top/hougansi.png);
+}
+
+.keyword-leaf1 {
+    width: 120px;
+    padding-bottom: 0%;
+    position: relative;
+    transform: translateX(450px) rotate(-30deg);
+}
+
+.keyword-text {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(0, 0, 0);
+}
+
+.keyword-leaf2 {
+    width: 120px;
+
+    position: relative;
+    transform: translate(-10px, -90px) rotate(-30deg); /* X, Yの順 */
+}
+
+.keyword-leaf3 {
+    width: 120px;
+
+    position: relative;
+    transform: translate(-130px, -50px) rotate(-120deg); /* X, Yの順 */
+}
+
+.keyword-magnifyingglass {
+    width: 120px;
+
+    position: relative;
+    transform: translate(250px, -150px) rotate(30deg); /* X, Yの順 */
+
+}
+
+.keyword-leaf4 {
+    width: 120px;
+
+    position: relative;
+    transform: translate(200px, -120px) rotate(30deg);
+}
+
+.secret-word {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+    margin-top: 60px;
+}
+
+.keyword-box {
+    width: 500px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.keyword-key {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#input-keyword {
+    border: 2px solid #a17413; /* 太さ・スタイル・色 */
+    padding: 10px 16px;        /* 内側の余白（高さ・幅に影響） */
+    font-size: 16px;
+}
+
+#button-keyword {
+    background: none;
+    border: none;
+    outline: none;    /* フォーカス時の枠も消える */
+    cursor: pointer;
+
+    color: #3bb80a;
+    font-size: 20px;
+}
+
+.link-botton-box {
+    width: 500px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-keyword-box {
+    width: 800px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 50px;
+
+    position: relative;
+    transform: translateX(50px); /* 右に100px */
+}
+
+.search-keyword-text {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+
+    
+}
+
+.search-keyword-image {
+    background-color: #ffffff00;
+    width: 50px;
+
+    position: relative;
+    transform: translateX(50px); /* 右に100px */
+
+
+}
+
+.link-bottones-box {
+    width: 800px;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; /* 折り返しを有効にする */
+    gap: 16px;       /* 要素間の余白 */
+
+    justify-content: space-around;
+
+
+}
+
+.link-bottones {
+    width: 25%; 
+    height: 250px;
+    background-color: bisque;
+    margin: 10px;
+
+    display: flex;
+    justify-content: center; /* 横方向：中央 */
+    align-items: center;
+}
+
+/* カーソルを乗せたとき */
+.link-bottones:hover .link-botton-img {
+    transform: translateY(-10px); /* 上に10px浮かぶ */
+}
+
+.link-botton {
+    
+}
+
+.link-botton-img {
+    width: 100%;
+    object-fit: cover; 
+    object-position: center;
+
+        /* アニメーションの準備 */
+    transition: transform 0.3s ease;
+}
+
+   /* オーバーレイ（暗い背景） */
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+    }
+
+    /* activeクラスがついたら表示 */
+    .overlay.active {
+      display: flex;
+    }
+
+    /* ポップアップの白い箱 */
+    .popup {
+      width: 500px;
+      height: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+#OK-popup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 30px;
+}
+
+.firework1 {
+    width: 150px;
+    height: auto;
+}
+
+.firework2 {
+    width: 150px;
+    height: auto;
+}
+
+.OK-button {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+
+    background: none;
+
+    border: none;
+    outline: none;    /* フォーカス時の枠も消える */
+    cursor: pointer;
+}
+
+.NO-img {
+    width: 150px;
+    height: auto;
+}
+
+#NO-popup-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 30px;
+}
+
+#NO-popup-1-2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 30px;
+}
+
+#NO-popup-2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 30px;
+}
+
+.OK-popup-text {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+}
+
+.NO-popup-text-1 {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+}
+
+.NO-popup-text-2 {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+}
+
+.NO-button-1 {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+
+    background: none;
+
+    border: none;
+    outline: none;    /* フォーカス時の枠も消える */
+    cursor: pointer;
+
+}
+
+.NO-button-1-2 {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+
+    background: none;
+
+    border: none;
+    outline: none;    /* フォーカス時の枠も消える */
+    cursor: pointer;
+
+}
+
+.NO-button-2 {
+    width: auto;
+    height: auto;
+    font-family: 'KanjyukuGothic', Courier, monospace;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2em;
+    color:rgb(110, 89, 18);
+
+    background: none;
+
+    border: none;
+    outline: none;    /* フォーカス時の枠も消える */
+    cursor: pointer;
+
+}
+
+.NO-popup-text-1-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="css/common.css"> <!-- ページの幅を統一するためのCSSファイルです。 -->
+  <link rel="stylesheet"
+    href="style-top.css"> <!-- こちらのCSSファイルに個人ページのスタイルを書いていただけますと幸いです。 -->
+  <title>トップページ</title>
+</head>
+<body>
+  <div class="background-cover">
+  <div class="page-wrapper">
+    <!-- ここにコンテンツを書き込んでください。 -->
+      <header>
+        <a class="page-link" href="">トップ</a>
+        <a class="page-link" href="./page-RandomDiary/page-RandomDiary.html">らんだむ<br>”にっき”</a>
+        <a class="page-link" href="./page-GifuAnime/page-GifuAnime.html">岐阜アニメ特集</a>
+        <a class="page-link" href="./page-Nobunaga/page-Nobunaga.html">織田信長<br>ゆかりの地</a>
+        <a class="page-link" href="./page-GeroOnsen/page-GeroOnsen.html">下呂温泉の<br>魅力</a>
+        <a class="page-link" href="./page-Hyway/page-Hyway.html">東海環状<br>自動車道</a>
+        <a class="page-link" href="./page-GifuPhoto/page-GifuPhoto.html">色でめぐる<br>岐阜</a>
+      </header>
+
+      <section>
+        <div class="fes-title-box">
+          <img class="fes-title-sirakawago" src="images-top/japan_gassyoudukuri_syuuraku.png">
+       <img class="fes-title" src="images-top/gifu-online-fes.png">
+       <img class="fes-title-sarubobo" src="images-top/toy_hida_sarubobo.png">
+      </div>
+
+       <video src="images-top/topVideo.mp4" autoplay muted loop playsinline></video>
+
+
+       <div class="gifu">
+
+       <h2 class="gifu-sub">ここでしか味わえない岐阜を！</h2>
+       <p class="gifu-detail">これは、岐阜にまつわる小さな記録。<br>自然や文化、さまざまな魅力を集めました。
+        <br>どうぞ、ゆっくりご覧ください。</p>
+
+       </div>
+
+       <div class="keyword">
+        <img class="keyword-leaf1" src="images-top/simple_leaf4.png">
+        <p class="keyword-text">このサイトの6つのスポットに<br><br>隠された文字があります<br><br><br><br>すべて集めて<br><br>秘密の言葉を見つけてください</p>
+        <img class="keyword-leaf2" src="images-top/simple_leaf6.png">
+        <img class="keyword-leaf3" src="images-top/simple_leaf8.png">
+        <img class="keyword-magnifyingglass" src="images-top/bunbougu_mushimegane.png">
+        <img class="keyword-leaf4" src="images-top/simple_leaf4.png">
+       </div>
+
+       <p class="secret-word">秘密の言葉を入力<br>（英単語を半角で入力）</p>
+
+       <div class="keyword-box">
+        <img class="keyword-key" src="images-top/lock_nankinjou.png">
+
+       <input id="input-keyword" type="text">
+       <button id="button-keyword" onclick="sendKeyword()"><strong>[クリック！]</strong></button>
+
+       </div>
+
+       <div class="search-keyword-box">
+           <p class="search-keyword-text">秘密の言葉を探しに行く</p>
+           <img class="search-keyword-image" src="images-top/foot.png">
+       </div>
+
+       <div class="link-bottones-box">
+        <div class="link-bottones"><a class="link-botton" href="./page-GifuPhoto/page-GifuPhoto.html"><img class="link-botton-img" src="images-top/button1.png"></a></div>
+        <div class="link-bottones"><a class="link-botton" href="./page-Nobunaga/page-Nobunaga.html"><img class="link-botton-img" src="images-top/button2.png"></a></div>
+        <div class="link-bottones"><a class="link-botton" href="./page-GeroOnsen/page-GeroOnsen.html"><img class="link-botton-img" src="images-top/button3.png"></a></div>
+        <div class="link-bottones"><a class="link-botton" href="./page-Hyway/page-Hyway.html"><img class="link-botton-img" src="images-top/button4.png"></a></div>
+        <div class="link-bottones"><a class="link-botton" href="./page-GifuAnime/page-GifuAnime.html"><img class="link-botton-img" src="images-top/button5.png"></a></div>
+        <div class="link-bottones"><a class="link-botton" href="./page-RandomDiary/page-RandomDiary.html"><img class="link-botton-img" src="images-top/button6.png"></a></div>
+       </div>
+       
+
+
+
+
+
+
+
+      </section>
+
+<!-- 正解ポップアップ -->
+<div class="overlay" id="popupA" onclick="closePopup(this, event)">
+    <div class="popup" >
+
+      <div id="OK-popup">
+      <img class="firework1" src="images-top/hanabi.png">
+      <p class=OK-popup-text>解読成功！<br>岐阜オンラインフェスの閲覧<br><br>ありがとうございました！</p>
+      <img class="firework2" src="images-top/hanabi.png">
+      </div>
+      
+      <button class="OK-button" onclick="closePopup(document.getElementById('popupA'))">OK</button>
+    
+    </div>
+  </div>
+
+
+
+<!-- 不正解ポップアップ (B-1) -->
+  <div class="overlay" id="popupB" onclick="closePopup(this, event)">
+    <div class="popup">
+
+      <div id="NO-popup-1">
+      <img class="NO-img" src="images-top/plus-5.png">
+      <div class="NO-popup-text-1-box">
+        <p class="NO-popup-text-1">秘密の言葉が違います。<br>ヒントを表示しますか？</p>
+      <div id="NO-popup-1-2">
+      <button class="NO-button-1" onclick="openPopupB()">はい</button>
+      <button class="NO-button-1-2" onclick="closePopup(document.getElementById('popupB'))">いいえ</button>
+    </div>
+  </div>
+  </div>
+    
+    </div>
+  </div>
+
+<!-- 不正解ポップアップ (B-2) -->
+  <div class="overlay" id="popupC" onclick="closePopup(this, event)">
+    <div class="popup">
+
+      <div id="NO-popup-2">
+      <img class="NO-img" src="images-top/mark_denkyu.png">
+      <div class="NO-popup-text-1-box">
+      <p class="NO-popup-text-2">ヒント！<br>岐阜県は、県土の約81％を森林<br>が占め、県全体が豊かな〇〇に<br>囲まれています。</p>
+      <div id="NO-popup-2-2">
+      <button class="NO-button-2" onclick="closePopup(document.getElementById('popupC'))">OK</button>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  </div>
+
+  <script src="script-top.js"></script>
+</body>
+</html>
