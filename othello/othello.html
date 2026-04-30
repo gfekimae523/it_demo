@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>オセロAIアリーナ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 6px 20px;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      min-height: 0;
+    }
+
+    .left-panel {
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .right-panel {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .control-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .player-color {
+      list-style: none;
+      display: block;
+
+      height: 40px;
+      font-size: 3.0rem;
+      line-height: 40px;
+      text-align: center;
+      color: #888;
+
+      padding-bottom: 8px;
+    }
+
+    .player-color-black {
+      color: #000;
+    }
+
+    .player-color-white {
+      color: #FFF
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 1.5rem;
+      line-height: 40px;
+      width: 30px;
+      text-align: center;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    select,
+    button {
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    select option {
+      background: #333;
+      color: #fff;
+    }
+
+    select:hover,
+    select:focus {
+      background: rgba(255, 255, 255, 0.3);
+      outline: none;
+    }
+
+    .start-btn {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .start-btn:hover {
+      background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    .speed-control {
+      margin-top: 6px;
+    }
+
+    .speed-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .speed-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .speed-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    }
+
+    .speed-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .speed-indicators {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .status-card {
+      min-height: 60px;
+      text-align: center;
+    }
+
+    .status-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .time-status {
+      font-size: 0.8rem;
+      color: #ffeb3b;
+      font-weight: 600;
+    }
+
+    .log-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .log-header {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .log-content {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 6px;
+      overflow-y: auto;
+      min-height: 0;
+      max-height: 200px;
+    }
+
+    .log-entry {
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0.9;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .timeout-warning {
+      color: #ff6b6b !important;
+      font-weight: bold;
+    }
+
+    .board-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .board-table {
+      border-collapse: separate;
+      border-spacing: 3px;
+      background: #0a5c2b;
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .board-cell {
+      width: 50px;
+      height: 50px;
+      background: #0f6b33;
+      border: 2px solid #0a5c2b;
+      border-radius: 6px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .board-cell:hover {
+      background: #148a42;
+    }
+
+    .cell-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .disc {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .disc.black {
+      background: radial-gradient(circle at 30% 30%, #555, #000);
+      border: 2px solid #333;
+    }
+
+    .disc.white {
+      background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+      border: 2px solid #ccc;
+    }
+
+    .disc:hover {
+      transform: scale(1.05);
+    }
+
+    /* レスポンシブ対応 */
+    @media (max-width: 900px) {
+      .header {
+        padding: 12px 15px;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .main-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+      }
+
+      .left-panel {
+        width: 100%;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .controls-card,
+      .log-card {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .log-card {
+        max-height: 200px;
+      }
+
+      .board-container {
+        padding: 15px;
+      }
+
+      .board-cell {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>オセロAIアリーナ</h1>
+  </div>
+
+  <div class="main-container">
+    <div class="left-panel">
+      <div class="card controls-card">
+        <div class="control-group">
+          <p class="player-color player1-color">●</p>
+          <label>1P</label>
+          <select id="player1Select">
+            <option value="MyAI" selected>MyAI</option>
+            <option value="EvaluateAI">評価関数AI (強さ★)</option>
+            <option value="MobilityAI">候補手数AI (強さ★★)</option>
+            <option value="AlphaBetaAI">3手読みAI (強さ★★★)</option>
+            <option value="HayashiMasahiroAI">HayashiMasahiroAI</option>
+            <option value="HayashiYukiAI">HayashiYukiAI</option>
+            <option value="KatouAI">KatouAI</option>
+            <option value="NakagawaAI">NakagawaAI</option>
+            <option value="NakamuraAI">NakamuraAI</option>
+            <option value="SakaiAI">SakaiAI</option>
+            <option value="SakashitaAI">SakashitaAI</option>
+            <option value="ShirakiAI">ShirakiAI</option>
+            <option value="SuematuAI">SuematuAI</option>
+            <option value="SuyamaAI">SuyamaAI</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <p class="player-color player2-color">●</p>
+          <label>2P</label>
+          <select id="player2Select">
+            <option value="MyAI">MyAI</option>
+            <option value="EvaluateAI" selected>評価関数AI (強さ★)</option>
+            <option value="MobilityAI">候補手数AI (強さ★★)</option>
+            <option value="AlphaBetaAI">3手読みAI (強さ★★★)</option>
+            <option value="HayashiMasahiroAI">HayashiMasahiroAI</option>
+            <option value="HayashiYukiAI">HayashiYukiAI</option>
+            <option value="KatouAI">KatouAI</option>
+            <option value="NakagawaAI">NakagawaAI</option>
+            <option value="NakamuraAI">NakamuraAI</option>
+            <option value="SakaiAI">SakaiAI</option>
+            <option value="SakashitaAI">SakashitaAI</option>
+            <option value="ShirakiAI">ShirakiAI</option>
+            <option value="SuematuAI">SuematuAI</option>
+            <option value="SuyamaAI">SuyamaAI</option>
+          </select>
+        </div>
+
+        <div class="speed-control">
+          <input type="range" id="speedSlider" class="speed-slider" min="1" max="5" value="3" step="1">
+          <div class="speed-indicators">
+            <span>超高速</span>
+            <span>高速</span>
+            <span>標準</span>
+            <span>低速</span>
+            <span>超低速</span>
+          </div>
+        </div>
+
+        <button class="start-btn" id="startBtn">ゲーム開始</button>
+
+        <div class="card status-card" style="margin-top: 12px; padding: 4px 8px;">
+          <div class="status-text" id="status">準備完了</div>
+          <div class="time-status" id="timeStatus"></div>
+        </div>
+      </div>
+
+      <div class="card log-card">
+        <div class="log-header">📝 ゲームログ</div>
+        <div class="log-content" id="log"></div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="board-container">
+        <table class="board-table" id="board"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 外部スクリプトを読み込みます（同じフォルダに board.js / myAi.js / sampleAi.js を置いてください） -->
+  <script src="board.js"></script>
+  <script src="sampleAI/myAi.js"></script>
+  <script src="playerAI/hayashiMasahiro.js"></script>
+  <script src="playerAI/hayashiYuki.js"></script>
+  <script src="playerAI/katou.js"></script>
+  <script src="playerAI/nakagawa.js"></script>
+  <script src="playerAI/nakamura.js"></script>
+  <script src="playerAI/sakai.js"></script>
+  <script src="playerAI/sakashita.js"></script>
+  <script src="playerAI/shiraki.js"></script>
+  <script src="playerAI/suematu.js"></script>
+  <script src="playerAI/suyama.js"></script>
+
+  <script>
+    // DOM 要素
+    const boardContainer = document.getElementById('board');
+    const startBtn = document.getElementById('startBtn');
+    const player1Select = document.getElementById('player1Select');
+    const player2Select = document.getElementById('player2Select');
+    const statusEl = document.getElementById('status');
+    const timeStatusEl = document.getElementById('timeStatus');
+    const logEl = document.getElementById('log');
+    const speedSlider = document.getElementById('speedSlider');
+
+    let board = null;           // Board インスタンス
+    let currentColor = 1;       // 1=黒, -1=白
+    let running = false;        // 自動実行中フラグ
+    let autoTimer = null;       // setTimeout ハンドル
+    let player1AI = null;       // 1P AI オブジェクト
+    let player2AI = null;       // 2P AI オブジェクト
+    let player1IsBlack = true;  // 1Pが黒かどうか
+    let timeLimit = 1000;       // 制限時間（ミリ秒）
+    let gameSpeed = 3;          // 1:超高速, 2:高速, 3:標準, 4:低速, 5:超低速
+
+    // スピード設定
+    const speedSettings = {
+      1: { delay: 100, label: '超高速' },
+      2: { delay: 300, label: '高速' },
+      3: { delay: 500, label: '標準' },
+      4: { delay: 1000, label: '低速' },
+      5: { delay: 2000, label: '超低速' }
+    };
+
+    // スピードスライダーのイベントリスナー
+    speedSlider.addEventListener('input', (e) => {
+      gameSpeed = parseInt(e.target.value);
+    });
+
+    function log(msg) {
+      const div = document.createElement('div');
+      div.className = 'log-entry';
+      if (msg.includes('タイムアウト') || msg.includes('制限時間')) {
+        div.className += ' timeout-warning';
+      }
+      div.textContent = msg;
+      logEl.prepend(div);
+    }
+
+    // 盤面表示を作る/更新する
+    function renderBoard(b) {
+      const tbl = document.createElement('table');
+      tbl.className = 'board-table';
+      for (let y = 0; y < 8; y++) {
+        const tr = document.createElement('tr');
+        for (let x = 0; x < 8; x++) {
+          const td = document.createElement('td');
+          td.className = 'board-cell';
+          td.dataset.x = x;
+          td.dataset.y = y;
+          const cell = document.createElement('div');
+          cell.className = 'cell-content';
+          const v = b.board[y][x];
+          if (v === 1) {
+            const d = document.createElement('div');
+            d.className = 'disc black';
+            cell.appendChild(d);
+          } else if (v === -1) {
+            const d = document.createElement('div');
+            d.className = 'disc white';
+            cell.appendChild(d);
+          }
+          td.appendChild(cell);
+          tr.appendChild(td);
+        }
+        tbl.appendChild(tr);
+      }
+      boardContainer.innerHTML = '';
+      boardContainer.appendChild(tbl);
+    }
+
+    // AI オブジェクトを選択名からインスタンス化する
+    function createAIByName(name) {
+      try {
+        if (typeof window[name] === 'function') {
+          try { return new window[name](); } catch (e) { return window[name]; }
+        }
+      } catch (e) { }
+      return null;
+    }
+
+    // 現在のプレイヤー情報を取得
+    function getCurrentPlayerInfo() {
+      const isPlayer1Turn = (currentColor === 1 && player1IsBlack) || (currentColor === -1 && !player1IsBlack);
+      return {
+        isPlayer1: isPlayer1Turn,
+        ai: isPlayer1Turn ? player1AI : player2AI,
+        name: isPlayer1Turn ? player1Select.value : player2Select.value,
+        playerNum: isPlayer1Turn ? '1P' : '2P'
+      };
+    }
+
+    // ゲームの1手を進める
+    function stepOnce() {
+      if (!board) return;
+      const color = currentColor;
+      const playerInfo = getCurrentPlayerInfo();
+      const valid = board.getValidMoves(color);
+
+      if (!valid || valid.length === 0) {
+        // パス判定。相手もパスなら終了
+        log(`${playerInfo.playerNum} (${color === 1 ? '黒' : '白'}) は打つ手がなくパス`);
+        const oppValid = board.getValidMoves(-color);
+        if (!oppValid || oppValid.length === 0) {
+          finishGame();
+          return;
+        } else {
+          currentColor = -currentColor;
+          updateStatus();
+
+          if (running) {
+            autoTimer = setTimeout(autoLoop, speedSettings[gameSpeed].delay);
+          }
+          return;
+        }
+      }
+
+      // 思考時間表示開始
+      timeStatusEl.textContent = `${playerInfo.playerNum} 思考中...`;
+
+      // AI実行（非同期風に）
+      setTimeout(() => {
+        const startTime = Date.now();
+        let move = null;
+        let error = null;
+        let elapsed = 0;
+
+        try {
+          move = playerInfo.ai.getMove(board.clone(), color);
+          elapsed = Date.now() - startTime;
+        } catch (e) {
+          elapsed = Date.now() - startTime;
+          error = e;
+          console.error(e);
+        }
+
+        // 時間表示更新
+        timeStatusEl.textContent = `${playerInfo.playerNum}: ${elapsed}ms`;
+
+        let finalMove = move;
+        let isTimeout = elapsed > timeLimit;
+
+        // タイムアウト、エラー、または無効な手の場合はランダムに選択
+        if (isTimeout || error || !move || typeof move.x !== 'number' || typeof move.y !== 'number') {
+          if (isTimeout) {
+            log(`${playerInfo.playerNum} (${playerInfo.name}) がタイムアウト！制限時間: ${timeLimit}ms, 実行時間: ${elapsed}ms`);
+          } else if (error) {
+            log(`${playerInfo.playerNum} のAI実行に失敗: ${error.message || error}。ランダムで代替。`);
+          } else {
+            log(`${playerInfo.playerNum} が無効な手を返しました。ランダムで代替。`);
+          }
+          finalMove = valid[Math.floor(Math.random() * valid.length)];
+        } else {
+          // 合法手でないならランダムで指す
+          const isLegal = valid.some(v => v.x === move.x && v.y === move.y);
+          if (!isLegal) {
+            log(`${playerInfo.playerNum} が不正な手を返しました。ランダムで代替。`);
+            finalMove = valid[Math.floor(Math.random() * valid.length)];
+          }
+        }
+
+        board.applyMove(finalMove.x, finalMove.y, color);
+        const moveType = (isTimeout || error) ? ' [制限時間超過→ランダム]' : '';
+        log(`${playerInfo.playerNum} (${color === 1 ? '黒' : '白'}): (${finalMove.x},${finalMove.y})${moveType}`);
+        renderBoard(board);
+
+        // ターン交代
+        currentColor = -currentColor;
+        updateStatus();
+
+        // ゲーム終了判定
+        const blackWhite = board.countDiscs();
+        const total = blackWhite.black + blackWhite.white;
+        if (total >= 64) {
+          finishGame();
+          return;
+        }
+
+        // 次のターンへ
+        if (running) {
+          autoTimer = setTimeout(autoLoop, speedSettings[gameSpeed].delay);
+        }
+      }, 0);
+    }
+
+    function updateStatus() {
+      const playerInfo = getCurrentPlayerInfo();
+      const colorName = currentColor === 1 ? '黒' : '白';
+      statusEl.textContent = (running ? '対戦中 ── ' : '停止中 ── ') +
+        `現在の手番: ${playerInfo.playerNum} (${colorName})`;
+    }
+
+    function finishGame() {
+      running = false;
+      if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+
+      const c = board.countDiscs();
+      let result = '';
+      let winner = '';
+
+      if (c.black > c.white) {
+        result = '黒の勝ち';
+        winner = player1IsBlack ? '1P' : '2P';
+      } else if (c.white > c.black) {
+        result = '白の勝ち';
+        winner = player1IsBlack ? '2P' : '1P';
+      } else {
+        result = '引き分け';
+        winner = '引き分け';
+      }
+
+      const finalResult = `ゲーム終了 ── ${result} (黒:${c.black} 白:${c.white})`;
+      if (winner !== '引き分け') {
+        statusEl.textContent = finalResult + ` ── ${winner}の勝利！`;
+      } else {
+        statusEl.textContent = finalResult;
+      }
+
+      timeStatusEl.textContent = '';
+      log(finalResult + (winner !== '引き分け' ? ` ── ${winner}の勝利！` : ''));
+    }
+
+    // 自動で動かすループ
+    function autoLoop() {
+      if (!running) return;
+      stepOnce();
+    }
+
+    // プレイヤー情報更新
+    function updatePlayerInfo() {
+      const p1ColorEl = document.querySelector('.player1-color');
+      const p2ColorEl = document.querySelector('.player2-color');
+
+      p1ColorEl.classList.remove('player-color-black', 'player-color-white');
+      p2ColorEl.classList.remove('player-color-black', 'player-color-white');
+      if (running) {
+        const p1Color = player1IsBlack ? 'player-color-black' : 'player-color-white';
+        p1ColorEl.classList.add(p1Color);
+        const p2Color = player1IsBlack ? 'player-color-white' : 'player-color-black';
+        p2ColorEl.classList.add(p2Color);
+      }
+    }
+
+    // スタート処理
+    startBtn.addEventListener('click', () => {
+      // board.js の Board が定義されているかチェック
+      if (typeof Board !== 'function') {
+        alert('board.js が読み込まれていません。同じフォルダに board.js を置いてください。');
+        return;
+      }
+
+      // 新しい盤面を作る
+      board = new Board();
+      renderBoard(board);
+      log('新しいゲームを開始');
+
+      // 先手後手をランダムに決定
+      player1IsBlack = Math.random() < 0.5;
+      log(`先手後手ランダム決定: ${player1IsBlack ? '1Pが黒（先手）、2Pが白（後手）' : '1Pが白（後手）、2Pが黒（先手）'}`);
+
+      // AI を生成
+      player1AI = createAIByName(player1Select.value);
+      player2AI = createAIByName(player2Select.value);
+
+      if (!player1AI) log('1P AIが見つかりません: ' + player1Select.value);
+      if (!player2AI) log('2P AIが見つかりません: ' + player2Select.value);
+
+      currentColor = 1; // 黒先行
+      running = true;
+
+      updatePlayerInfo();
+      updateStatus();
+
+      // 自動ループ開始
+      if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+      autoLoop();
+    });
+
+    // 選択変更時の情報更新
+    player1Select.addEventListener('change', updatePlayerInfo);
+    player2Select.addEventListener('change', updatePlayerInfo);
+
+    // ページ読み込み時の初期表示
+    window.addEventListener('load', () => {
+      // 初期盤面（Board がまだ無くても表示できるように暫定の空盤を作る）
+      if (typeof Board === 'function') {
+        board = new Board();
+      } else {
+        // 最低限の 8x8 空盤を作る（board.js を後で読み込むと上書きされます）
+        board = {
+          board: Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => 0)),
+          getValidMoves: () => [],
+          applyMove: () => { },
+          clone: () => this,
+          countDiscs: () => ({ black: 0, white: 0 })
+        };
+      }
+      renderBoard(board);
+      statusEl.textContent = '準備完了';
+      updatePlayerInfo();
+      log('オセロAIアリーナが読み込まれました。');
+    });
+
+  </script>
+</body>
+
+</html>

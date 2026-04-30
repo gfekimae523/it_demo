@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大会結果発表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 3rem;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .teams-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .team {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        .team.winner {
+            transform: scale(1.15);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .team.winner .team-name,
+        .team.winner .score {
+            color: white;
+        }
+
+        .team-name {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .score-label {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .score {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 4rem 6rem;
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .popup.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .popup-content {
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-team {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-points {
+            font-size: 5rem;
+            font-weight: bold;
+        }
+
+        .button {
+            position: fixed;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 2rem 4rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .button:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .button:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        .winner-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 60%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 2rem 10rem;
+            border-radius: 50px;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .winner-banner.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .winner-banner h2 {
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .winner-banner .trophy {
+            font-size: 8rem;
+            animation: rotate 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+
+            0%,
+            100% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .close-btn {
+            margin-top: 1rem;
+            padding: 0.7rem 3rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #f5576c;
+            /* バナーの色に合わせた強調色 */
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #eee;
+            transform: scale(1.05);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .score-animation {
+            animation: scoreUp 0.5s ease-out;
+        }
+
+        @keyframes scoreUp {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+                color: #f5576c;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .progress {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏆 大会結果発表 🏆</h1>
+        <div class="progress" id="progress">前半戦</div>
+        <div class="teams-container">
+            <div class="team" id="teamA">
+                <div class="team-name">Aチーム</div>
+                <div class="score-label">得点</div>
+                <div class="score" id="scoreA">0</div>
+            </div>
+            <div class="team" id="teamB">
+                <div class="team-name">Bチーム</div>
+                <div class="score-label">得点</div>
+                <div class="score" id="scoreB">0</div>
+            </div>
+        </div>
+        <button class="button" id="nextBtn">スタート</button>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-team" id="popupTeam"></div>
+            <div class="popup-points" id="popupPoints"></div>
+        </div>
+    </div>
+
+    <div class="winner-banner" id="winnerBanner">
+        <div class="trophy">🏆</div>
+        <h2 id="winnerText"></h2>
+        <button class="close-btn" id="closeWinnerBanner">閉じる</button>
+    </div>
+
+    <script>
+        // 得点データ設定
+        const initialScores = {
+            A: 11800,
+            B: 9300,
+        };
+
+        const pointAdditions = [
+            { team: 'A', points: 300 },
+            { team: 'B', points: 600 },
+            { team: 'A', points: 900 },
+            { team: 'B', points: 1200 },
+            { team: 'B', points: 1500 },
+            { team: 'B', points: 1800 },
+            { team: 'A', points: 2100 },
+            { team: 'A', points: 2400 },
+            { team: 'A', points: 2700 },
+            { team: 'B', points: 3000 }
+        ];
+
+        let currentStep = 0;
+        let scores = { A: 0, B: 0 };
+
+        const scoreAEl = document.getElementById('scoreA');
+        const scoreBEl = document.getElementById('scoreB');
+        const popup = document.getElementById('popup');
+        const popupTeam = document.getElementById('popupTeam');
+        const popupPoints = document.getElementById('popupPoints');
+        const nextBtn = document.getElementById('nextBtn');
+        const winnerBanner = document.getElementById('winnerBanner');
+        const winnerText = document.getElementById('winnerText');
+        const progress = document.getElementById('progress');
+        const closeWinnerBannerBtn = document.getElementById('closeWinnerBanner');
+
+        function updateScore(team, points, animate = true) {
+            scores[team] += points;
+            const scoreEl = team === 'A' ? scoreAEl : scoreBEl;
+            scoreEl.textContent = scores[team];
+
+            if (animate) {
+                scoreEl.classList.add('score-animation');
+                setTimeout(() => scoreEl.classList.remove('score-animation'), 500);
+            }
+        }
+
+        function showPopup(team, points) {
+            const teamName = team === 'A' ? 'Aチーム' : 'Bチーム';
+            popupTeam.textContent = teamName;
+            popupPoints.textContent = `+${points}点`;
+            popup.classList.add('show');
+        }
+
+        function hidePopup() {
+            popup.classList.remove('show');
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function showWinner() {
+            const winner = scores.A > scores.B ? 'A' : 'B';
+            const winnerName = winner === 'A' ? 'Aチーム' : 'Bチーム';
+
+            winnerText.textContent = `${winnerName} 優勝!!`;
+            winnerBanner.classList.add('show');
+
+            const winnerTeam = document.getElementById(`team${winner}`);
+            winnerTeam.classList.add('winner');
+
+            createConfetti();
+
+        }
+
+        closeWinnerBannerBtn.addEventListener('click', () => {
+            winnerBanner.classList.remove('show');
+            // nextBtnを非表示にしていた場合は、ここで表示に戻すか、完全に非表示を継続するか調整します。
+            // 今回は優勝決定後に不要なので、showWinnerで非表示にする代わりに、閉じるボタンで非表示にします。
+            // もしnextBtnで次の画面へ遷移させる場合などは、ボタンの表示を調整してください。
+            // nextBtn.style.display = 'block'; 
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep === 0) {
+                // 前半戦の得点表示
+                updateScore('A', initialScores.A, false);
+                updateScore('B', initialScores.B, false);
+                nextBtn.textContent = '次へ';
+                progress.textContent = '前半戦終了時点';
+            } else if (currentStep <= pointAdditions.length) {
+                // 得点加算
+                const addition = pointAdditions[currentStep - 1];
+                showPopup(addition.team, addition.points);
+                progress.textContent = `加算 ${currentStep}/${pointAdditions.length}`;
+
+                setTimeout(() => {
+                    updateScore(addition.team, addition.points);
+                    hidePopup();
+                }, 1500);
+
+                if (currentStep === pointAdditions.length) {
+                    nextBtn.textContent = '結果発表!';
+                }
+            } else {
+                // 最終結果表示
+                showWinner();
+                progress.textContent = '優勝決定!';
+                nextBtn.style.display = 'none';
+            }
+
+            currentStep++;
+        });
+    </script>
+</body>
+
+</html>

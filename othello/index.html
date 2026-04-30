@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>勝敗予想チャレンジ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro', 'Meiryo', 'メイリオ', sans-serif;
+      background: #ddd;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      color: #667eea;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f7f7f7;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    
+    .user-info .nickname {
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      flex: 1;
+    }
+    
+    .user-info .nickname:hover {
+      color: #667eea;
+    }
+    
+    .user-info .points {
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    
+    .match-card {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .match-name {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .teams {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .team-button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+    }
+    
+    .team-button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+    
+    .team-button.selected {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+    
+    .team-button .vote-count {
+      display: block;
+      font-size: 12px;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+    
+    .result-card {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .result-card.win {
+      border-left-color: #4CAF50;
+      background: #f1f8f4;
+    }
+    
+    .result-card.lose {
+      border-left-color: #f44336;
+      background: #fef1f0;
+    }
+    
+    .result-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .your-choice {
+      font-weight: bold;
+      color: #667eea;
+    }
+    
+    .points-change {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .points-change.positive {
+      color: #4CAF50;
+    }
+    
+    .points-change.negative {
+      color: #f44336;
+    }
+    
+    .ranking-list {
+      list-style: none;
+    }
+    
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .ranking-item.top3 {
+      background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+      color: white;
+    }
+    
+    .ranking-item.top3.rank-1 {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    }
+    
+    .ranking-item.top3.rank-2 {
+      background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+    }
+    
+    .ranking-item.top3.rank-3 {
+      background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+    }
+    
+    .ranking-item.current-user {
+      border: 3px solid #667eea;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    }
+    
+    .rank-number {
+      font-weight: bold;
+      font-size: 18px;
+      min-width: 30px;
+    }
+    
+    .rank-nickname {
+      flex: 1;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    
+    .rank-points {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+    }
+    
+    .empty-message {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+    
+    .refresh-button {
+      width: 100%;
+      padding: 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .refresh-button:hover {
+      background: #5568d3;
+    }
+    
+    /* モーダル */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .modal-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    
+    .modal-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .modal-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .modal-button.primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .modal-button.secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>勝敗予想チャレンジ</h1>
+      <div class="user-info" id="userInfo">
+        <span class="nickname" onclick="openNicknameModal()">読み込み中...</span>
+        <span class="points">0 pt</span>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">投票エリア</div>
+      <div id="openMatches" class="loading">試合情報を読み込んでいます...</div>
+      <button class="refresh-button" onclick="loadOpenMatches()">🔄 更新</button>
+    </div>
+    
+    <!-- <div class="section">
+      <div class="section-title">結果確認</div>
+      <div id="closedMatches" class="loading">結果を読み込んでいます...</div>
+    </div> -->
+    
+    <div class="section">
+      <div class="section-title">ランキング</div>
+      <ul id="ranking" class="ranking-list loading">ランキングを読み込んでいます...</ul>
+    </div>
+  </div>
+
+  <!-- ニックネーム変更モーダル -->
+  <div class="modal" id="nicknameModal">
+    <div class="modal-content">
+      <div class="modal-title">ニックネームを変更</div>
+      <input type="text" id="nicknameInput" class="modal-input" placeholder="新しいニックネームを入力" maxlength="20">
+      <div class="modal-buttons">
+        <button class="modal-button secondary" onclick="closeNicknameModal()">キャンセル</button>
+        <button class="modal-button primary" onclick="saveNickname()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let userId = null;
+    let userVotes = {};
+    let currentNickname = '';
+    
+    // クッキーを取得
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+    
+    // クッキーを設定（365日有効）
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = `expires=${date.toUTCString()}`;
+      document.cookie = `${name}=${value};${expires};path=/`;
+    }
+    
+    // 初期化
+    window.onload = function() {
+      initializeUser();
+    };
+    
+    // ユーザーを初期化
+    function initializeUser() {
+      userId = localStorage.getItem('esports_user_id');
+      
+      if (userId) {
+        // 既存ユーザー
+        loadUserInfo();
+        loadOpenMatches();
+        // loadClosedMatches();
+        loadRanking();
+      } else {
+        // 新規ユーザーを作成
+        google.script.run
+          .withSuccessHandler(function(user) {
+            userId = user.user_id;
+            localStorage.setItem('esports_user_id', userId);
+            
+            document.getElementById('userInfo').innerHTML = `
+              <span class="nickname" onclick="openNicknameModal()">${user.nickname} ✏️</span>
+              <span class="points">${user.points} pt</span>
+            `;
+            currentNickname = user.nickname;
+            
+            loadOpenMatches();
+            // loadClosedMatches();
+            loadRanking();
+          })
+          .withFailureHandler(function(error) {
+            alert('エラーが発生しました: ' + error);
+          })
+          .createNewUser();
+      }
+    }
+    
+    // ユーザー情報を読み込み
+    function loadUserInfo() {
+      google.script.run
+        .withSuccessHandler(function(user) {
+          if (user) {
+            document.getElementById('userInfo').innerHTML = `
+              <span class="nickname" onclick="openNicknameModal()">${user.nickname} ✏️</span>
+              <span class="points">${user.points} pt</span>
+            `;
+            currentNickname = user.nickname;
+          }
+        })
+        .getUserInfo(userId);
+    }
+    
+    // ニックネーム変更モーダルを開く
+    function openNicknameModal() {
+      document.getElementById('nicknameInput').value = currentNickname;
+      document.getElementById('nicknameModal').classList.add('active');
+    }
+    
+    // ニックネーム変更モーダルを閉じる
+    function closeNicknameModal() {
+      document.getElementById('nicknameModal').classList.remove('active');
+    }
+    
+    // ニックネームを保存
+    function saveNickname() {
+      const newNickname = document.getElementById('nicknameInput').value.trim();
+      
+      if (!newNickname) {
+        alert('ニックネームを入力してください');
+        return;
+      }
+      
+      google.script.run
+        .withSuccessHandler(function(result) {
+          if (result.success) {
+            closeNicknameModal();
+            loadUserInfo();
+            loadRanking();
+            alert('ニックネームを変更しました！');
+          } else {
+            alert('変更に失敗しました');
+          }
+        })
+        .updateNickname(userId, newNickname);
+    }
+    
+    // 開催中の試合を読み込み
+    function loadOpenMatches() {
+      if (!userId) return;
+      
+      document.getElementById('openMatches').innerHTML = '<div class="loading">試合情報を読み込んでいます...</div>';
+      
+      google.script.run
+        .withSuccessHandler(function(matches) {
+          google.script.run
+            .withSuccessHandler(function(votes) {
+              userVotes = {};
+              if (votes && Array.isArray(votes)) {
+                votes.forEach(vote => {
+                  userVotes[vote.match_id] = vote.choice;
+                });
+              }
+              displayOpenMatches(matches);
+            })
+            .withFailureHandler(function(error) {
+              console.error('投票履歴の取得エラー:', error);
+              displayOpenMatches(matches);
+            })
+            .getUserVotes(userId);
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('openMatches').innerHTML = '<div class="empty-message">試合情報の取得に失敗しました</div>';
+        })
+        .getOpenMatches();
+    }
+    
+    // 開催中の試合を表示
+    function displayOpenMatches(matches) {
+      const container = document.getElementById('openMatches');
+      
+      if (matches.length === 0) {
+        container.innerHTML = '<div class="empty-message">現在投票可能な試合はありません</div>';
+        return;
+      }
+      
+      let html = '';
+      matches.forEach(match => {
+        const userChoice = userVotes[match.match_id];
+        html += `
+          <div class="match-card">
+            <div class="match-name">${match.match_name}</div>
+            <div class="teams">
+              <button class="team-button ${userChoice === 'team1' ? 'selected' : ''}" 
+                      onclick="vote(${match.match_id}, 'team1')">
+                ${match.team1}
+                <span class="vote-count">オッズ：${match.team1_odds}</span>
+              </button>
+              <button class="team-button ${userChoice === 'team2' ? 'selected' : ''}" 
+                      onclick="vote(${match.match_id}, 'team2')">
+                ${match.team2}
+                <span class="vote-count">オッズ：${match.team2_odds}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // 投票する
+    function vote(matchId, choice) {
+      if (!userId) {
+        alert('ユーザー情報の読み込み中です。しばらくお待ちください。');
+        return;
+      }
+      
+      google.script.run
+        .withSuccessHandler(function(result) {
+          if (result.success) {
+            // 投票を更新
+            userVotes[matchId] = choice;
+            // 画面を再読み込み
+            loadOpenMatches();
+            loadUserInfo();
+            alert('投票を受け付けました！');
+          }
+        })
+        .withFailureHandler(function(error) {
+          alert('エラーが発生しました: ' + error);
+        })
+        .submitVote(userId, matchId, choice);
+    }
+    
+    // 終了した試合を読み込み
+    function loadClosedMatches() {
+      google.script.run
+        .withSuccessHandler(function(matches) {
+          google.script.run
+            .withSuccessHandler(function(votes) {
+              displayClosedMatches(matches, votes);
+            })
+            .getUserVotes(userId);
+        })
+        .getClosedMatches();
+    }
+    
+    // 終了した試合を表示
+    function displayClosedMatches(matches, votes) {
+      const container = document.getElementById('closedMatches');
+      
+      const voteMap = {};
+      votes.forEach(vote => {
+        voteMap[vote.match_id] = vote;
+      });
+      
+      const closedVotes = matches.map(match => {
+        return {
+          match: match,
+          vote: voteMap[match.match_id]
+        };
+      }).filter(item => item.vote);
+      
+      if (closedVotes.length === 0) {
+        container.innerHTML = '<div class="empty-message">まだ結果が確定した試合はありません</div>';
+        return;
+      }
+      
+      let html = '';
+      closedVotes.forEach(item => {
+        const match = item.match;
+        const vote = item.vote;
+        const isWin = vote.result === 'win';
+        const teamName = vote.choice === 'team1' ? match.team1 : match.team2;
+        
+        html += `
+          <div class="result-card ${isWin ? 'win' : 'lose'}">
+            <div class="match-name">${match.match_name}</div>
+            <div class="result-info">
+              <span class="your-choice">あなたの予想: ${teamName}</span>
+              <span class="points-change ${vote.points_change >= 0 ? 'positive' : 'negative'}">
+                ${vote.points_change >= 0 ? '+' : ''}${vote.points_change} pt
+              </span>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // ランキングを読み込み
+    function loadRanking() {
+      google.script.run
+        .withSuccessHandler(function(users) {
+          displayRanking(users);
+        })
+        .getRanking();
+    }
+    
+    // ランキングを表示
+    function displayRanking(users) {
+      const container = document.getElementById('ranking');
+      
+      if (users.length === 0) {
+        container.innerHTML = '<div class="empty-message">まだランキングがありません</div>';
+        return;
+      }
+      
+      let html = '';
+      users.forEach((user, index) => {
+        const rank = index + 1;
+        const isTop3 = rank <= 3;
+        const isCurrentUser = user.user_id == userId;
+        html += `
+          <li class="ranking-item ${isTop3 ? 'top3 rank-' + rank : ''} ${isCurrentUser ? 'current-user' : ''}">
+            <span class="rank-number">${rank}</span>
+            <span class="rank-nickname">${user.nickname}${isCurrentUser ? ' (You)' : ''}</span>
+            <span class="rank-points">${user.points} pt</span>
+          </li>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

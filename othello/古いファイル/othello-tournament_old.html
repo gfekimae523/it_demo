@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>オセロAI大会 - Tournament System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: #fff;
+      height: 100vh;
+      /* overflow: hidden; */
+    }
+
+    /* ヘッダー */
+    .header {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 30px;
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(90deg, #ffd700, #ffed4e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .phase-indicator {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+
+    .phase-badge {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    /* メインコンテナ */
+    .main-container {
+      display: flex;
+      height: calc(100vh - 70px);
+      padding: 15px;
+      gap: 15px;
+    }
+
+    /* 左パネル - 対戦情報 */
+    .left-panel {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* 中央 - ゲームボード */
+    .center-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* 右パネル - トーナメント表 */
+    .right-panel {
+      width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* カードスタイル */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+      color: #ffd700;
+    }
+
+    /* プレイヤー管理 */
+    .player-list {
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .player-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .player-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .player-name {
+      font-weight: 500;
+    }
+
+    .player-stats {
+      display: flex;
+      gap: 15px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .add-player-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .add-player-form input {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+    }
+
+    .add-player-form input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* 対戦カード */
+    .match-card {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .vs-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+    }
+
+    .player-display {
+      text-align: center;
+    }
+
+    .player-display .name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .player-display .color-indicator {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .color-indicator.black {
+      background: radial-gradient(circle at 30% 30%, #555, #000);
+      border: 3px solid #333;
+    }
+
+    .color-indicator.white {
+      background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+      border: 3px solid #ccc;
+    }
+
+    .vs-text {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    /* ゲームコントロール */
+    .controls-card {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    /* スピードコントロール */
+    .speed-control {
+      margin: 15px 0;
+    }
+
+    .speed-slider {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .speed-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(45deg, #ffd700, #ffed4e);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+    }
+
+    .speed-indicators {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ボードコンテナ */
+    .board-wrapper {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .board-table {
+      border-collapse: separate;
+      border-spacing: 2px;
+      background: #0a5c2b;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .board-cell {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #0f7236, #0f6b33);
+      border: 1px solid #0a5c2b;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .board-cell:hover {
+      background: linear-gradient(135deg, #148a42, #13803e);
+    }
+
+    .disc {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .disc.black {
+      background: radial-gradient(circle at 35% 35%, #666, #000);
+      border: 2px solid #222;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .disc.white {
+      background: radial-gradient(circle at 35% 35%, #fff, #ddd);
+      border: 2px solid #bbb;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .disc.flip {
+      animation: flipDisc 0.6s ease-in-out;
+    }
+
+    @keyframes flipDisc {
+      0% { transform: translate(-50%, -50%) rotateY(0deg) scale(1); }
+      50% { transform: translate(-50%, -50%) rotateY(90deg) scale(1.1); }
+      100% { transform: translate(-50%, -50%) rotateY(180deg) scale(1); }
+    }
+
+    /* ステータス表示 */
+    .status-display {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    .score-display {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .score-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .turn-indicator {
+      font-size: 1.2rem;
+      color: #ffd700;
+    }
+
+    /* トーナメント表 */
+    .tournament-bracket {
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+    }
+
+    .round-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffd700;
+      margin: 15px 0 10px;
+      padding-left: 10px;
+      border-left: 4px solid #ffd700;
+    }
+
+    .match-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .match-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .match-item.active {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
+      border: 1px solid rgba(255, 215, 0, 0.5);
+    }
+
+    .match-players {
+      font-size: 0.9rem;
+    }
+
+    .match-result {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+
+    /* リーダーボード */
+    .leaderboard {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .leaderboard-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .rank {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+
+    .rank.gold {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #333;
+    }
+
+    .rank.silver {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      color: #333;
+    }
+
+    .rank.bronze {
+      background: linear-gradient(135deg, #cd7f32, #e4a853);
+      color: #fff;
+    }
+
+    .rank.other {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .leaderboard-stats {
+      display: flex;
+      gap: 20px;
+      font-size: 0.9rem;
+    }
+
+    .stat-win {
+      color: #4CAF50;
+    }
+
+    .stat-lose {
+      color: #ff6b6b;
+    }
+
+    /* モーダル */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #2a5298, #1e3c72);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .winner-announcement {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ffd700, #ffed4e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+      50% { text-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+    }
+
+    .final-score {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    /* ログ表示 */
+    .log-content {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .log-entry {
+      margin-bottom: 5px;
+      padding: 3px 5px;
+      border-left: 3px solid transparent;
+    }
+
+    .log-entry.error {
+      border-left-color: #ff6b6b;
+      color: #ff8787;
+    }
+
+    .log-entry.success {
+      border-left-color: #4CAF50;
+      color: #66bb6a;
+    }
+
+    .log-entry.info {
+      border-left-color: #ffd700;
+      color: #ffed4e;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>🏆 オセロAI Championship 2025</h1>
+    <div class="phase-indicator">
+      <div class="phase-badge" id="currentPhase">準備中</div>
+      <div id="matchProgress">試合: 0 / 0</div>
+    </div>
+  </div>
+
+  <!-- メインコンテナ -->
+  <div class="main-container">
+    <!-- 左パネル -->
+    <div class="left-panel">
+      <!-- プレイヤー管理 -->
+      <div class="card">
+        <div class="card-title">📋 参加者リスト</div>
+        <div class="player-list" id="playerList"></div>
+        <div class="add-player-form">
+          <input type="text" id="playerNameInput" placeholder="AI名を入力">
+          <button class="btn-primary" onclick="addPlayer()">追加</button>
+        </div>
+      </div>
+
+      <!-- 対戦カード -->
+      <div class="card match-card">
+        <div class="card-title">⚔️ 現在の対戦</div>
+        <div class="vs-display">
+          <div class="player-display">
+            <div class="name" id="player1Name">-</div>
+            <div class="color-indicator black" id="player1Color">●</div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="player-display">
+            <div class="name" id="player2Name">-</div>
+            <div class="color-indicator white" id="player2Color">○</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- コントロール -->
+      <div class="card controls-card">
+        <div class="card-title">🎮 大会コントロール</div>
+        <div class="btn-group">
+          <button class="btn-primary" id="startTournamentBtn" onclick="startTournament()">予選開始</button>
+          <button class="btn-secondary" id="startFinalsBtn" onclick="startFinals()" disabled>決勝T開始</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn-secondary" id="pauseBtn" onclick="pauseMatch()">一時停止</button>
+          <button class="btn-danger" onclick="resetTournament()">リセット</button>
+        </div>
+        <div class="speed-control">
+          <input type="range" id="speedSlider" class="speed-slider" min="1" max="5" value="1" step="1">
+          <div class="speed-indicators">
+            <span>最速</span>
+            <span>高速</span>
+            <span>標準</span>
+            <span>低速</span>
+            <span>観戦</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ログ -->
+      <div class="card">
+        <div class="card-title">📝 システムログ</div>
+        <div class="log-content" id="logContent"></div>
+      </div>
+    </div>
+
+    <!-- 中央パネル - ゲームボード -->
+    <div class="center-panel">
+      <div class="board-wrapper">
+        <table class="board-table" id="board"></table>
+      </div>
+      <div class="status-display">
+        <div class="score-display">
+          <div class="score-item">
+            <span>●</span>
+            <span id="blackScore">2</span>
+          </div>
+          <div class="score-item">
+            <span>○</span>
+            <span id="whiteScore">2</span>
+          </div>
+        </div>
+        <div class="turn-indicator" id="turnIndicator">ゲーム開始前</div>
+      </div>
+    </div>
+
+    <!-- 右パネル -->
+    <div class="right-panel">
+      <!-- リーダーボード -->
+      <div class="card">
+        <div class="card-title">🏅 順位表</div>
+        <div class="leaderboard" id="leaderboard"></div>
+      </div>
+
+      <!-- トーナメント表 -->
+      <div class="card">
+        <div class="card-title">📊 トーナメント進行</div>
+        <div class="tournament-bracket" id="tournamentBracket"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 勝者発表モーダル -->
+  <div class="modal" id="winnerModal">
+    <div class="modal-content">
+      <div class="winner-announcement" id="winnerName">優勝</div>
+      <div class="final-score" id="finalScore"></div>
+      <button class="btn-primary" onclick="closeModal()">閉じる</button>
+    </div>
+  </div>
+
+  <script src="board.js"></script>
+  <script src="myAi.js"></script>
+  <script src="sampleEvaluateAi.js"></script>
+  <script src="sampleAlphaBetaAi.js"></script>
+  <script src="sampleMobilityAi.js"></script>
+
+  <script>
+    // グローバル変数
+    let board = null;
+    let players = [];
+    let matches = [];
+    let currentMatchIndex = 0;
+    let currentMatch = null;
+    let tournamentPhase = 'preparation'; // preparation, preliminary, finals
+    let gameRunning = false;
+    let gamePaused = false;
+    let gameSpeed = 1;
+    let autoTimer = null;
+    let currentColor = 1; // 1=黒, -1=白
+
+    // スピード設定
+    const speedSettings = {
+      1: { delay: 50, label: '最速' },
+      2: { delay: 200, label: '高速' },
+      3: { delay: 500, label: '標準' },
+      4: { delay: 1000, label: '低速' },
+      5: { delay: 2000, label: '観戦' }
+    };
+
+    // 初期化
+    function init() {
+      createBoard();
+      updateUI();
+      
+      // スピードスライダー
+      document.getElementById('speedSlider').addEventListener('input', (e) => {
+        gameSpeed = parseInt(e.target.value);
+      });
+
+      // エンターキーで追加
+      document.getElementById('playerNameInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addPlayer();
+      });
+
+      // デフォルトプレイヤー追加
+      const defaultPlayers = [
+        'MyAI', 'AlphaAI', 'BetaAI', 'GammaAI', 
+        'DeltaAI', 'EpsilonAI', 'ZetaAI', 'EtaAI',
+        'ThetaAI', 'IotaAI', 'KappaAI', 'LambdaAI'
+      ];
+      defaultPlayers.forEach(name => addPlayer(name));
+    }
+
+    // ボード作成
+    function createBoard() {
+      const table = document.getElementById('board');
+      table.innerHTML = '';
+      
+      for (let y = 0; y < 8; y++) {
+        const tr = document.createElement('tr');
+        for (let x = 0; x < 8; x++) {
+          const td = document.createElement('td');
+          td.className = 'board-cell';
+          td.dataset.x = x;
+          td.dataset.y = y;
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+      
+      board = new Board();
+      renderBoard();
+    }
+
+    // ボード描画
+    function renderBoard() {
+      if (!board) return;
+      
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+          cell.innerHTML = '';
+          
+          const value = board.board[y][x];
+          if (value !== 0) {
+            const disc = document.createElement('div');
+            disc.className = `disc ${value === 1 ? 'black' : 'white'}`;
+            cell.appendChild(disc);
+          }
+        }
+      }
+      
+      updateScore();
+    }
+
+    // スコア更新
+    function updateScore() {
+      if (!board) return;
+      const count = board.countDiscs();
+      document.getElementById('blackScore').textContent = count.black;
+      document.getElementById('whiteScore').textContent = count.white;
+    }
+
+    // プレイヤー追加
+    function addPlayer(name) {
+      if (!name) {
+        name = document.getElementById('playerNameInput').value.trim();
+        document.getElementById('playerNameInput').value = '';
+      }
+      
+      if (!name || players.find(p => p.name === name)) return;
+      
+      const player = {
+        id: Date.now() + Math.random(),
+        name: name,
+        wins: 0,
+        losses: 0,
+        draws: 0,
+        points: 0,
+        ai: createAI(name)
+      };
+      
+      players.push(player);
+      updatePlayerList();
+      addLog(`プレイヤー追加: ${name}`, 'success');
+    }
+
+    // AI作成（実際の大会では各AIファイルから読み込む）
+    function createAI(name) {
+      // サンプル実装: ランダムに既存AIを割り当て
+      const ais = ['MyAI', 'EvaluateAI', 'MobilityAI', 'AlphaBetaAI'];
+      const aiName = ais[Math.floor(Math.random() * ais.length)];
+      
+      try {
+        if (typeof window[aiName] === 'function') {
+          return new window[aiName]();
+        }
+      } catch (e) {
+        return { getMove: (board, color) => {
+          const moves = board.getValidMoves(color);
+          return moves[Math.floor(Math.random() * moves.length)];
+        }};
+      }
+      
+      // フォールバック: ランダムAI
+      return {
+        getMove: (board, color) => {
+          const moves = board.getValidMoves(color);
+          return moves[Math.floor(Math.random() * moves.length)];
+        }
+      };
+    }
+
+    // トーナメント開始
+    function startTournament() {
+      if (players.length < 2) {
+        addLog('参加者が2名以上必要です', 'error');
+        return;
+      }
+      
+      tournamentPhase = 'preliminary';
+      generatePreliminaryMatches();
+      currentMatchIndex = 0;
+      document.getElementById('startTournamentBtn').disabled = true;
+      addLog('予選ラウンド開始！', 'info');
+      playNextMatch();
+    }
+
+    // 予選試合生成（総当たり戦）
+    function generatePreliminaryMatches() {
+      matches = [];
+      for (let i = 0; i < players.length; i++) {
+        for (let j = i + 1; j < players.length; j++) {
+          matches.push({
+            player1: players[i],
+            player2: players[j],
+            result: null
+          });
+        }
+      }
+      updateTournamentBracket();
+      updateMatchProgress();
+    }
+
+    // 次の試合を開始
+    function playNextMatch() {
+      if (currentMatchIndex >= matches.length) {
+        if (tournamentPhase === 'preliminary') {
+          addLog('予選ラウンド終了！', 'info');
+          document.getElementById('startFinalsBtn').disabled = false;
+        } else {
+          finishTournament();
+        }
+        return;
+      }
+      
+      currentMatch = matches[currentMatchIndex];
+      startMatch(currentMatch.player1, currentMatch.player2);
+    }
+
+    // 試合開始
+    function startMatch(player1, player2) {
+      board = new Board();
+      renderBoard();
+      
+      // 先手後手をランダムに決定
+      const blackFirst = Math.random() < 0.5;
+      currentMatch.blackPlayer = blackFirst ? player1 : player2;
+      currentMatch.whitePlayer = blackFirst ? player2 : player1;
+      
+      // UI更新
+      document.getElementById('player1Name').textContent = currentMatch.blackPlayer.name;
+      document.getElementById('player2Name').textContent = currentMatch.whitePlayer.name;
+      document.getElementById('player1Color').className = 'color-indicator black';
+      document.getElementById('player2Color').className = 'color-indicator white';
+      
+      currentColor = 1; // 黒先手
+      gameRunning = true;
+      gamePaused = false;
+      
+      addLog(`試合開始: ${currentMatch.blackPlayer.name}(黒) vs ${currentMatch.whitePlayer.name}(白)`, 'info');
+      updateMatchProgress();
+      updateTournamentBracket();
+      
+      // ゲームループ開始
+      gameLoop();
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      if (!gameRunning || gamePaused) return;
+      
+      const currentPlayer = currentColor === 1 ? currentMatch.blackPlayer : currentMatch.whitePlayer;
+      const validMoves = board.getValidMoves(currentColor);
+      
+      // 打てる手がない場合
+      if (validMoves.length === 0) {
+        const oppositeColor = -currentColor;
+        const oppositeValidMoves = board.getValidMoves(oppositeColor);
+        
+        if (oppositeValidMoves.length === 0) {
+          // 両者打てない = ゲーム終了
+          endMatch();
+          return;
+        } else {
+          // パス
+          addLog(`${currentPlayer.name} パス`, 'info');
+          currentColor = oppositeColor;
+          updateTurnIndicator();
+          autoTimer = setTimeout(gameLoop, speedSettings[gameSpeed].delay);
+          return;
+        }
+      }
+      
+      // AI思考
+      updateTurnIndicator();
+      
+      setTimeout(() => {
+        try {
+          const startTime = Date.now();
+          let move = currentPlayer.ai.getMove(board.clone(), currentColor);
+          const elapsed = Date.now() - startTime;
+          
+          // 時間制限チェック（1秒）
+          if (elapsed > 1000) {
+            addLog(`${currentPlayer.name} タイムアウト！`, 'error');
+            move = validMoves[Math.floor(Math.random() * validMoves.length)];
+          }
+          
+          // 合法手チェック
+          if (!move || !validMoves.find(m => m.x === move.x && m.y === move.y)) {
+            addLog(`${currentPlayer.name} 不正な手！`, 'error');
+            move = validMoves[Math.floor(Math.random() * validMoves.length)];
+          }
+          
+          // 手を適用
+          board.applyMove(move.x, move.y, currentColor);
+          renderBoard();
+          
+          // ターン交代
+          currentColor = -currentColor;
+          
+          // 次のループ
+          if (gameRunning) {
+            autoTimer = setTimeout(gameLoop, speedSettings[gameSpeed].delay);
+          }
+          
+        } catch (error) {
+          addLog(`${currentPlayer.name} エラー: ${error.message}`, 'error');
+          // エラー時はランダムに打つ
+          const move = validMoves[Math.floor(Math.random() * validMoves.length)];
+          board.applyMove(move.x, move.y, currentColor);
+          renderBoard();
+          currentColor = -currentColor;
+          
+          if (gameRunning) {
+            autoTimer = setTimeout(gameLoop, speedSettings[gameSpeed].delay);
+          }
+        }
+      }, 0);
+    }
+
+    // 試合終了
+    function endMatch() {
+      gameRunning = false;
+      if (autoTimer) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+      
+      const count = board.countDiscs();
+      let winner, loser;
+      
+      if (count.black > count.white) {
+        winner = currentMatch.blackPlayer;
+        loser = currentMatch.whitePlayer;
+        currentMatch.result = `${winner.name} 勝利 (${count.black}-${count.white})`;
+      } else if (count.white > count.black) {
+        winner = currentMatch.whitePlayer;
+        loser = currentMatch.blackPlayer;
+        currentMatch.result = `${winner.name} 勝利 (${count.white}-${count.black})`;
+      } else {
+        currentMatch.result = `引き分け (${count.black}-${count.white})`;
+      }
+      
+      // スコア更新
+      if (winner && loser) {
+        winner.wins++;
+        winner.points += 3;
+        loser.losses++;
+        addLog(`試合終了: ${currentMatch.result}`, 'success');
+      } else {
+        currentMatch.blackPlayer.draws++;
+        currentMatch.whitePlayer.draws++;
+        currentMatch.blackPlayer.points++;
+        currentMatch.whitePlayer.points++;
+        addLog(`試合終了: 引き分け (${count.black}-${count.white})`, 'info');
+      }
+      
+      updateLeaderboard();
+      updateTournamentBracket();
+      
+      // 次の試合へ
+      currentMatchIndex++;
+      if (currentMatchIndex < matches.length) {
+        setTimeout(() => playNextMatch(), 2000);
+      } else {
+        if (tournamentPhase === 'preliminary') {
+          addLog('予選ラウンド終了！', 'info');
+          document.getElementById('startFinalsBtn').disabled = false;
+          document.getElementById('currentPhase').textContent = '予選終了';
+        } else if (tournamentPhase === 'finals') {
+          // 決勝トーナメントの次のラウンドチェック
+          checkNextRound();
+        }
+      }
+    }
+
+    // 決勝トーナメント開始
+    function startFinals() {
+      tournamentPhase = 'finals';
+      document.getElementById('currentPhase').textContent = '決勝トーナメント';
+      document.getElementById('startFinalsBtn').disabled = true;
+      
+      // 上位8名を選出
+      const sortedPlayers = [...players].sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        const aDiff = (a.wins - a.losses);
+        const bDiff = (b.wins - b.losses);
+        return bDiff - aDiff;
+      });
+      
+      const finalists = sortedPlayers.slice(0, Math.min(8, sortedPlayers.length));
+      
+      // トーナメント組み合わせ作成
+      generateFinalsMatches(finalists);
+      currentMatchIndex = 0;
+      addLog('決勝トーナメント開始！', 'info');
+      playNextMatch();
+    }
+
+    // 決勝トーナメント組み合わせ生成
+    function generateFinalsMatches(finalists) {
+      matches = [];
+      currentMatch.round = 'quarterfinals';
+      
+      // 準々決勝
+      for (let i = 0; i < finalists.length; i += 2) {
+        if (i + 1 < finalists.length) {
+          matches.push({
+            player1: finalists[i],
+            player2: finalists[i + 1],
+            round: 'quarterfinals',
+            result: null
+          });
+        }
+      }
+      
+      updateTournamentBracket();
+      updateMatchProgress();
+    }
+
+    // 次のラウンドチェック
+    function checkNextRound() {
+      const currentRound = matches[0]?.round;
+      const winners = matches
+        .filter(m => m.result)
+        .map(m => {
+          const score = m.result.match(/\((\d+)-(\d+)\)/);
+          if (score) {
+            const black = parseInt(score[1]);
+            const white = parseInt(score[2]);
+            return black > white ? m.player1 : m.player2;
+          }
+          return null;
+        })
+        .filter(w => w);
+      
+      if (currentRound === 'quarterfinals' && winners.length >= 4) {
+        // 準決勝へ
+        matches = [];
+        for (let i = 0; i < winners.length; i += 2) {
+          if (i + 1 < winners.length) {
+            matches.push({
+              player1: winners[i],
+              player2: winners[i + 1],
+              round: 'semifinals',
+              result: null
+            });
+          }
+        }
+        currentMatchIndex = 0;
+        addLog('準決勝開始！', 'info');
+        playNextMatch();
+      } else if (currentRound === 'semifinals' && winners.length >= 2) {
+        // 決勝へ
+        matches = [{
+          player1: winners[0],
+          player2: winners[1],
+          round: 'finals',
+          result: null
+        }];
+        currentMatchIndex = 0;
+        addLog('決勝戦開始！', 'info');
+        playNextMatch();
+      } else if (currentRound === 'finals' && winners.length >= 1) {
+        // 優勝者決定
+        finishTournament(winners[0]);
+      }
+    }
+
+    // トーナメント終了
+    function finishTournament(champion) {
+      gameRunning = false;
+      tournamentPhase = 'finished';
+      document.getElementById('currentPhase').textContent = '大会終了';
+      
+      if (champion) {
+        showWinnerModal(champion);
+        addLog(`🏆 優勝: ${champion.name}！`, 'success');
+      }
+      
+      document.getElementById('startTournamentBtn').disabled = false;
+      document.getElementById('startFinalsBtn').disabled = true;
+    }
+
+    // 一時停止
+    function pauseMatch() {
+      gamePaused = !gamePaused;
+      document.getElementById('pauseBtn').textContent = gamePaused ? '再開' : '一時停止';
+      
+      if (!gamePaused && gameRunning) {
+        gameLoop();
+      }
+    }
+
+    // リセット
+    function resetTournament() {
+      if (!confirm('本当にリセットしますか？')) return;
+      
+      gameRunning = false;
+      gamePaused = false;
+      if (autoTimer) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+      
+      players.forEach(p => {
+        p.wins = 0;
+        p.losses = 0;
+        p.draws = 0;
+        p.points = 0;
+      });
+      
+      matches = [];
+      currentMatchIndex = 0;
+      currentMatch = null;
+      tournamentPhase = 'preparation';
+      
+      document.getElementById('currentPhase').textContent = '準備中';
+      document.getElementById('startTournamentBtn').disabled = false;
+      document.getElementById('startFinalsBtn').disabled = true;
+      document.getElementById('pauseBtn').textContent = '一時停止';
+      
+      createBoard();
+      updateUI();
+      addLog('トーナメントをリセットしました', 'info');
+    }
+
+    // UI更新関数群
+    function updateUI() {
+      updatePlayerList();
+      updateLeaderboard();
+      updateTournamentBracket();
+      updateMatchProgress();
+    }
+
+    function updatePlayerList() {
+      const list = document.getElementById('playerList');
+      list.innerHTML = players.map(p => `
+        <div class="player-item">
+          <span class="player-name">${p.name}</span>
+          <div class="player-stats">
+            <span>勝: ${p.wins}</span>
+            <span>負: ${p.losses}</span>
+            <span>分: ${p.draws}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateLeaderboard() {
+      const sorted = [...players].sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        return (b.wins - b.losses) - (a.wins - a.losses);
+      });
+      
+      const board = document.getElementById('leaderboard');
+      board.innerHTML = sorted.map((p, i) => {
+        let rankClass = 'other';
+        if (i === 0) rankClass = 'gold';
+        else if (i === 1) rankClass = 'silver';
+        else if (i === 2) rankClass = 'bronze';
+        
+        return `
+          <div class="leaderboard-item">
+            <div class="rank ${rankClass}">${i + 1}</div>
+            <span class="leaderboard-name">${p.name}</span>
+            <div class="leaderboard-stats">
+              <span class="stat-win">勝${p.wins}</span>
+              <span class="stat-lose">負${p.losses}</span>
+              <span>点${p.points}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateTournamentBracket() {
+      const bracket = document.getElementById('tournamentBracket');
+      
+      if (matches.length === 0) {
+        bracket.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5);">対戦表なし</div>';
+        return;
+      }
+      
+      const rounds = {};
+      matches.forEach(m => {
+        const round = m.round || 'preliminary';
+        if (!rounds[round]) rounds[round] = [];
+        rounds[round].push(m);
+      });
+      
+      let html = '';
+      const roundNames = {
+        'preliminary': '予選ラウンド',
+        'quarterfinals': '準々決勝',
+        'semifinals': '準決勝',
+        'finals': '決勝'
+      };
+      
+      for (const [round, matchList] of Object.entries(rounds)) {
+        html += `<div class="round-title">${roundNames[round] || round}</div>`;
+        matchList.forEach((m, i) => {
+          const isActive = m === currentMatch;
+          html += `
+            <div class="match-item ${isActive ? 'active' : ''}">
+              <span class="match-players">${m.player1.name} vs ${m.player2.name}</span>
+              <span class="match-result">${m.result || (isActive ? '対戦中' : '未実施')}</span>
+            </div>
+          `;
+        });
+      }
+      
+      bracket.innerHTML = html;
+    }
+
+    function updateMatchProgress() {
+      const total = matches.length;
+      const completed = matches.filter(m => m.result).length;
+      document.getElementById('matchProgress').textContent = `試合: ${completed} / ${total}`;
+    }
+
+    function updateTurnIndicator() {
+      const currentPlayer = currentColor === 1 ? currentMatch?.blackPlayer : currentMatch?.whitePlayer;
+      const colorName = currentColor === 1 ? '黒' : '白';
+      document.getElementById('turnIndicator').textContent = 
+        currentPlayer ? `${currentPlayer.name} (${colorName}) の番` : 'ゲーム開始前';
+    }
+
+    // モーダル
+    function showWinnerModal(winner) {
+      document.getElementById('winnerName').textContent = `🏆 ${winner.name} 優勝！`;
+      document.getElementById('finalScore').textContent = 
+        `戦績: ${winner.wins}勝 ${winner.losses}負 ${winner.draws}分`;
+      document.getElementById('winnerModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('winnerModal').classList.remove('active');
+    }
+
+    // ログ
+    function addLog(message, type = 'info') {
+      const log = document.getElementById('logContent');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      const time = new Date().toLocaleTimeString('ja-JP');
+      entry.textContent = `[${time}] ${message}`;
+      log.insertBefore(entry, log.firstChild);
+      
+      // 古いログを削除
+      while (log.children.length > 50) {
+        log.removeChild(log.lastChild);
+      }
+    }
+
+    // 初期化実行
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html><!DOCTYPE html>
