@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-CAFE</title>
+  <meta name="description" content="「静寂の中、心満ちる一杯を。」ゆったりと身を委ねられる「快適な空間」。お一人おひとりを大切にお迎えする「おもてなしの心」。そして、安らぎのひとときにそっと寄り添う「豊潤な味わい」。世代を超え、あらゆる方が心から寛げる、上質で穏やかな時間がここにあります。日常の喧騒から離れ、静寂と共に豊かな一杯をお楽しみください。"/>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const drawerInput = document.getElementById('drawer_input');
+      const navLinks = document.querySelectorAll('.nav_list a');
+
+      navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+              // リンクがクリックされたら、チェックボックスのチェックを外す
+              drawerInput.checked = false;
+          });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="Header-Logo">
+      <a href="index.html">
+        <img src="images/index-images/d-cafe-rogo200×200.png" alt="" class="image">
+      </a>
+    </div>
+    <div class="Header-Menu">
+      <ul>
+        <li>
+          <a href="news.html">お知らせ</a>
+        </li>
+        <li>
+          <a href="index.html#Commitment">こだわり</a>
+        </li>
+        <li>
+          <a href="#">メニュー</a>
+        </li>
+        <li>
+          <a href="index.html#Gallery">ギャラリー</a>
+        </li>
+        <li>
+          <a href="index.html#Infomation">店舗情報</a>
+        </li>
+      </ul>
+    </div>
+    <div class="nav">
+    
+        <!-- ハンバーガーメニューの表示・非表示を切り替えるチェックボックス -->
+        <input id="drawer_input" class="drawer_hidden" type="checkbox">
+    
+        <!-- ハンバーガーアイコン -->
+        <label for="drawer_input" class="drawer_open"><span></span></label>
+    
+        <!-- メニュー -->
+        <nav class="nav_content">
+          <ul class="nav_list">
+            <li class="nav_item"><a href="news.html">お知らせ</a></li>
+            <li class="nav_item"><a href="index.html#Commitment">こだわり</a></li>
+            <li class="nav_item"><a href="#">メニュー</a></li>
+            <li class="nav_item"><a href="index.html#Gallery">ギャラリー</a></li>
+            <li class="nav_item"><a href="index.html#Infomation">店舗情報</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+  </header>
+  <div class="Top-Wrapper">
+    <div class="Container">
+        <h1 class="menu-h1">
+            　メニュー
+        </h1>
+        <p>　※　表示価格は税込み価格です</p>
+        <h4>
+            　■　ドリンク
+        </h4>
+        <div class="menulist">
+            <div>
+                <img src="images\menu-images\coffee.jpg" alt="" class="image">
+                <h5>ブレンドコーヒー</h5>
+                <p>S:420円 M:450円 L:480円</p>
+            </div>
+            <div>
+                <img src="images\menu-images\au-lait.jpg" alt="" class="image">
+                <h5>カフェラテ</h5>
+                <p>S:450円 M:480円 L:510円</p>
+            </div>
+            <div>
+                <img src="images\menu-images\ice-au-lait.jpg" alt="" class="image">
+                <h5>アイスカフェラテ</h5>
+                <p>S:450円 M:480円 L:510円</p>
+            </div>
+            <div>
+                <img src="images\menu-images\ice-coffee.jpg" alt="" class="image">
+                <h5>アイスコーヒー</h5>
+                <p>S:420円 M:450円 L:480円</p>
+            </div>
+            <div>
+                <img src="images\menu-images\hot-tea.jpg" alt="" class="image">
+                <h5>紅茶</h5>
+                <p>S:430円 M:460円 L:490円</p>
+            </div>
+            <div>
+                <img src="images\menu-images\lemon-tea.jpg" alt="" class="image">
+                <h5>アイスティー</h5>
+                <p>S:430円 M:460円 L:490円</p>
+            </div>
+        </div>
+        <h4>
+            　■　フード
+        </h4>
+        <div class="menulist">
+            <div>
+                <img src="images\menu-images\sandowichi.jpg" alt="" class="image">
+                <h5>サンドウィッチ</h5>
+                <p>480円～</p>
+            </div>
+            <div>
+                <img src="images\menu-images\pasuta.jpg" alt="" class="image">
+                <h5>パスタ</h5>
+                <p>750円～</p>
+            </div>
+            <div>
+                <img src="images\menu-images\hotdog.jpg" alt="" class="image">
+                <h5>ホットドック</h5>
+                <p>450円～</p>
+            </div>
+            <div>
+                <img src="images\menu-images\cake.jpg" alt="" class="image">
+                <h5>ケーキ</h5>
+                <p>350円～</p>
+            </div>
+            <div>
+                <img src="images\menu-images\ice.jpg" alt="" class="image">
+                <h5>アイスクリーム</h5>
+                <p>380円～</p>
+            </div>
+        </div>
+    </div>
+  </div>
+  <footer>
+    <div class="Container">
+      <div class="Copyright">
+        <p>©　2025 D-CAFE all rights reserved. </p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

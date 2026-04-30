@@ -1,0 +1,445 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans JP";
+    letter-spacing: 0.05em;
+}
+
+p {
+    font-size: clamp(16px, calc(10.655px + 0.695vw), 24px);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    font-size: clamp(24px, calc(22.54px + 0.28vw), 28px);
+    display: block;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: clamp(31px, calc(24.79px + 1.21vw), 48px);
+    margin: 0 auto;
+    text-align: center;
+    letter-spacing: 0.35em;
+}
+
+.news-h1 {
+    padding-top: 40px;
+    padding-left: 5%;
+    font-size: clamp(31px, calc(28.44px + 0.5vw), 38px);
+    text-align: left;
+}
+
+.menu-h1{
+    padding-top: 40px;
+    font-size: clamp(31px, calc(28.44px + 0.5vw), 38px);
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: clamp(28px, calc(24.34px + 0.71vw), 38px);
+    border: 2px solid black;
+    margin: 0 auto;
+    width: 250px;
+    text-align: center;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+.news-h3{
+    font-size: clamp(24px, calc(21.08px + 0.57vw), 32px);
+}
+
+.newsdate-h3{
+    font-size: clamp(20px, calc(18.54px + 0.28vw), 24px);
+}
+
+h4 {
+    font-size: clamp(24px, calc(21.81px + 0.43vw), 30px);
+    margin-top: 20px;
+}
+
+h5{
+    font-size: clamp(22px, calc(19.81px + 0.43vw), 28px);
+    margin-top: 10px;
+}
+
+.Container {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.flex {
+    display: flex;
+}
+
+header {
+    height: 80px;
+    width: 100%;
+    background-color: #D93B3B;
+    position: fixed;
+    z-index: 10;
+    color: #FFFFFF;
+    line-height: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Header-Logo{
+    height: 80px;
+    width: 80px;
+    margin-left: 20px;
+}
+
+.image {
+    max-width: 100%;
+    display: block;
+}
+
+.Header-Menu {
+    height: 80px;
+}
+
+.Header-Menu ul {
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Header-Menu li {
+    list-style: none;
+    padding: 0 20px;
+}
+
+.Header-Menu li a{
+    font-size: clamp(20px, calc(18.54px + 0.28vw), 24px);
+}
+
+.nav {
+    display: none;
+}
+
+.Top-Wrapper {
+    padding-top: 80px;
+}
+
+.Top-Wrapper .image{
+    width: 100vw;
+    height: auto;
+}
+
+.News-Wrapper,.Commit-Wrapper,.Menu-Wrapper,.Gallery-Wrapper,.Info-Wrapper {
+    padding-top: 100px;
+}
+
+.news-link {
+    margin-top: 40px;
+    color: #D93B3B;
+    text-align: center;
+}
+
+.news-link:hover{
+    text-decoration: underline;
+    text-decoration-color: #D93B3B;
+}
+
+.Commit-Unit{
+    margin-top: 40px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Commit-image {
+    width: 45%;
+}
+
+.Commit-Message {
+    width: 55%;
+    display: flex;
+    justify-content: right;
+    padding-right: 1.5%;
+}
+
+.Commit-Message p {
+    line-height: 1.8;
+    letter-spacing: 0.1em;
+}
+
+.menu-unit {
+    width: 90%;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-top: 80px;
+}
+
+.menu-unit div{
+    padding: 0 40px;
+}
+
+.menu-link a{
+    margin: 0 auto;
+    margin-top: 40px;
+    background-color: #D93B3B;
+    color: #FFFFFF;
+    text-align: center;
+    width: 300px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.gallery-unit {
+    width: 90%;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-top: 80px;
+}
+
+.gallery-unit div{
+    padding: 0 30px;
+}
+
+.map {
+    width: 45%;
+}
+
+.info-text {
+    width: 45%;
+    display: flex;
+    justify-content: right;
+}
+
+.info-unit  {
+    margin: 0 auto;
+    margin-top: 40px;
+    justify-content: space-between;
+}
+
+.info-text p {
+    line-height: 1.8;
+    letter-spacing: 0.1em;
+}
+
+footer {
+    height: 80px;
+    width: 100%;
+    background-color: #D93B3B;
+    color: #FFFFFF;
+    line-height: 80px;
+    margin-top: 100px;
+}
+
+.Copyright {
+    text-align: right;
+}
+
+.cafe-exterior {
+    display: block;
+    margin: 0 auto;
+    width: 70%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.blog {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #D93B3B;
+}
+
+.blog p{
+    padding-top: 10px;
+    line-height: 1.8;
+    letter-spacing: 0.1em;
+}
+
+.menulist{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.menulist div{
+    width : calc(100% / 3) ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.menulist img {
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.menulist p {
+    margin-top: 20px;
+}
+
+
+@media (max-width: 768px) {
+
+    .Commit-Wrapper h1{
+        letter-spacing: initial;
+    }
+
+    .Header-Menu {
+        display: none;
+    }
+
+    .Commit-Unit {
+        flex-direction: column;
+    }
+
+    .Commit-Unit div {
+        width: 100%;
+    }
+
+    .Commit-Message {
+        text-align: center;
+        padding-right: initial;
+        justify-content: center;
+    }
+
+    .Commit-Message p {
+        padding-bottom: 40px;
+    }
+
+    .menu-unit div {
+        padding: 0 3%;
+    }
+
+    .gallery-unit div{
+        padding: 0 3%;
+    }
+
+    .info-unit {
+        flex-direction: column;
+    }
+
+    .info-text {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .info-text p {
+        padding-bottom: 40px;
+    }
+
+    .map {
+        width: 100%;
+        height: auto;
+    }
+
+    .map iframe {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/1;
+    }
+
+    .menulist {
+        flex-direction: column;
+    }
+
+    .menulist div{
+        width : 100% ;
+    }
+
+    .menulist img {
+        height: 100%;
+    }
+
+
+    .nav {
+        display: initial;
+    }
+
+    .drawer_hidden {
+      display: none;
+    }
+
+    /* ハンバーガーアイコンの設置スペース */
+    .drawer_open {
+      display: flex;
+      height: 80px;
+      width: 80px;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 100;/* 重なり順を一番上にする */
+      cursor: pointer;
+    }
+
+    /* ハンバーガーメニューのアイコン */
+    .drawer_open span,
+    .drawer_open span:before,
+    .drawer_open span:after {
+      content: '';
+      display: block;
+      height: 3px;
+      width: 25px;
+      border-radius: 3px;
+      background: #fff;
+      transition: 0.5s;
+      position: absolute;
+    }
+
+    /* 三本線の一番上の棒の位置調整 */
+    .drawer_open span:before {
+      bottom: 8px;
+    }
+
+    /* 三本線の一番下の棒の位置調整 */
+    .drawer_open span:after {
+      top: 8px;
+    }
+
+    /* アイコンがクリックされたら真ん中の線を透明にする */
+    #drawer_input:checked ~ .drawer_open span {
+      background: rgba(255, 255, 255, 0);
+    }
+
+    /* アイコンがクリックされたらアイコンが×印になように上下の線を回転 */
+    #drawer_input:checked ~ .drawer_open span::before {
+      bottom: 0;
+      transform: rotate(45deg);
+    }
+
+    #drawer_input:checked ~ .drawer_open span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    /* メニューのデザイン*/
+    .nav_content {
+      width: calc(100% / 3) ;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      right: 100%; /* メニューを画面の外に飛ばす */
+      z-index: 99;
+      background: #D93B3B;
+      transition: .5s;
+    }
+
+    /* メニュー黒ポチを消す */
+    .nav_list {
+      list-style: none;
+      text-align: center;
+      padding-top: 80px;
+    }
+
+    /* アイコンがクリックされたらメニューを表示 */
+    #drawer_input:checked ~ .nav_content {
+      right: 0;/* メニューを画面に入れる */
+    }
+
+}

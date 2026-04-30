@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-CAFE</title>
+  <meta name="description" content="「静寂の中、心満ちる一杯を。」ゆったりと身を委ねられる「快適な空間」。お一人おひとりを大切にお迎えする「おもてなしの心」。そして、安らぎのひとときにそっと寄り添う「豊潤な味わい」。世代を超え、あらゆる方が心から寛げる、上質で穏やかな時間がここにあります。日常の喧騒から離れ、静寂と共に豊かな一杯をお楽しみください。"/>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const drawerInput = document.getElementById('drawer_input');
+      const navLinks = document.querySelectorAll('.nav_list a');
+
+      navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+              // リンクがクリックされたら、チェックボックスのチェックを外す
+              drawerInput.checked = false;
+          });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="Header-Logo">
+      <a href="index.html">
+        <img src="images/index-images/d-cafe-rogo200×200.png" alt="" class="image">
+      </a>
+    </div>
+    <div class="Header-Menu">
+      <ul>
+        <li>
+          <a href="#">お知らせ</a>
+        </li>
+        <li>
+          <a href="index.html#Commitment">こだわり</a>
+        </li>
+        <li>
+          <a href="menu.html">メニュー</a>
+        </li>
+        <li>
+          <a href="index.html#Gallery">ギャラリー</a>
+        </li>
+        <li>
+          <a href="index.html#Infomation">店舗情報</a>
+        </li>
+      </ul>
+    </div>
+    <div class="nav">
+    
+        <!-- ハンバーガーメニューの表示・非表示を切り替えるチェックボックス -->
+        <input id="drawer_input" class="drawer_hidden" type="checkbox">
+    
+        <!-- ハンバーガーアイコン -->
+        <label for="drawer_input" class="drawer_open"><span></span></label>
+    
+        <!-- メニュー -->
+        <nav class="nav_content">
+          <ul class="nav_list">
+            <li class="nav_item"><a href="#">お知らせ</a></li>
+            <li class="nav_item"><a href="index.html#Commitment">こだわり</a></li>
+            <li class="nav_item"><a href="menu.html">メニュー</a></li>
+            <li class="nav_item"><a href="index.html#Gallery">ギャラリー</a></li>
+            <li class="nav_item"><a href="index.html#Infomation">店舗情報</a></li>
+          </ul>
+        </nav>
+      </div>
+  </header>
+
+  <div  class="Top-Wrapper">
+    <div class="Container">
+      <h1 class="news-h1">
+        お知らせ
+      </h1>
+      <img src="images\news-images\cafe-exterior.jpg" alt="" class="cafe-exterior">
+      <div class="blog">
+        <h3>
+          <span class="news-h3">『D-CAFE』オープン‼</span>
+          <span class="newsdate-h3">　2025.05.01</span>
+        </h3>
+        <p>
+          このたび、落ち着きと温もりの空間を大切にしたカフェ、<br>
+          『D-CAFE』をオープンする運びとなりました。<br>
+          ゆったり身を委ねられる「快適な空間」、<br>
+          お一人おひとりを大切にお迎えする「おもてなしの心」、<br>
+          そして、安らぎのひとときにそっと寄り添う「豊潤な味わい」。<br>
+          世代を超え、皆様の心が穏やかで豊かな時間となりますよう、<br>
+          スタッフ一同、心をこめてお迎えいたします。<br>
+          皆様のご来店を、心よりお待ちしております。<br>
+          ■ オープン日：2025年 5月1日<br>
+          ■ 場所：岐阜県岐阜市神田町9丁目<br> 
+          ■ 営業時間：8:00 ～ 21:00<br>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="Container">
+      <div class="Copyright">
+        <p>©　2025 D-CAFE all rights reserved. </p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
